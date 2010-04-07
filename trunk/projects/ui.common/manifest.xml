@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!-- http://tx.teotigraphix.org/flex4 -->
+<componentPackage>
+	
+	<!-- Components -->
+	<component id="ComponentBorder" class="org.teotigraphix.ui.components.ComponentBorder"/>
+	<component id="DataControl" class="org.teotigraphix.ui.components.DataControl"/>
+	<component id="TitleBar" class="org.teotigraphix.ui.components.TitleBar"/>
+	<component id="TitleContainer" class="org.teotigraphix.ui.components.TitleContainer"/>
+	
+	<!-- Layouts -->
+	<component id="ButtonBarLayout" class="org.teotigraphix.ui.layouts.controlSupport.ButtonBarLayout"/>
+	<component id="ButtonBarHorizontalLayout" class="org.teotigraphix.ui.layouts.ButtonBarHorizontalLayout"/>
+	<component id="ButtonBarVerticalLayout" class="org.teotigraphix.ui.layouts.ButtonBarVerticalLayout"/>
+
+</componentPackage>

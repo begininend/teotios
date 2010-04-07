@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+// Copyright 2010 Michael Schmalle - Teoti Graphix, LLC
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+// http://www.apache.org/licenses/LICENSE-2.0 
+// 
+// Unless required by applicable law or agreed to in writing, software 
+// distributed under the License is distributed on an "AS IS" BASIS, 
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and 
+// limitations under the License
+// 
+// Author: Michael Schmalle, Principal Architect
+// mschmalle at teotigraphix dot com
+-->
+<!--- 
+ The default <code>skinClass</code> for the <code>TitleBar</code>.
+
+ @author Michael Schmalle
+ @copyright Teoti Graphix, LLC
+ @productversion 1.0
+-->
+<s:Skin xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" 
+		xmlns:mx="library://ns.adobe.com/flex/halo"
+		alpha.disabled="0.5">
+	
+	<fx:Metadata>
+		
+		[HostComponent("org.teotigraphix.ui.components.TitleBar")]
+		
+	</fx:Metadata>
+	
+	<s:states>
+		<s:State name="normal"/>
+		<s:State name="right"/>
+		<s:State name="bottom"/>
+		<s:State name="left"/>
+		<s:State name="disabled"/>
+	</s:states>
+
+	<fx:Script>
+		<![CDATA[
+			import org.teotigraphix.ui.api.ITitleContainer;
+			
+			/**
+			 * @private
+			 */
+			override protected function updateDisplayList(unscaledWidth:Number, 
+														  unscaledHeight:Number):void
+			{
+				super.updateDisplayList(unscaledWidth, unscaledHeight);
+			}
+
+		]]>
+	</fx:Script>
+	
+	<!--
+	<s:Rect top="0" right="0" left="0" bottom="0">
+		<s:fill>
+			<s:SolidColor color="#CCCCCC"/>
+		</s:fill>
+	</s:Rect>
+	-->
+	
+	<s:HGroup width="100%" 
+			  verticalAlign="middle"
+			  paddingTop="{getStyle('paddingTop')}"
+			  paddingRight="{getStyle('paddingRight')}"
+			  paddingBottom="{getStyle('paddingBottom')}"
+			  paddingLeft="{getStyle('paddingLeft')}">
+		
+		<s:HGroup width="100%" 
+				  gap="{getStyle('gap')}"
+				  verticalAlign="bottom">
+			
+			<!--- The <code>titleIcon</code> display image. -->
+			<s:BitmapImage id="titleIconDisplay"/>
+			
+			<!--- The <code>title</code> display string. -->
+			<s:Label id="titleDisplay" 
+					 text="Title text"
+					 fontWeight="bold"
+					 minWidth="10"
+					 width="100%"/>
+			
+		</s:HGroup>
+		
+		<s:HGroup gap="{getStyle('gap')}">
+			
+			<!--- The <code>minimizeButton</code> display button. -->
+			<s:ToggleButton id="minimizeButtonDisplay" 
+							skinClass="org.teotigraphix.ui.skins.controlSupport.MinimizeButtonSkin"
+							width="13" height="13"/>
+			
+			<!--- The <code>maximizeButton</code> display button. -->
+			<s:ToggleButton id="maximizeButtonDisplay" 
+							skinClass="org.teotigraphix.ui.skins.controlSupport.MaximizeButtonSkin"
+							width="13" height="13"/>
+			
+			<!--- The <code>closeButton</code> display button. -->
+			<s:Button id="closeButtonDisplay" 
+					  skinClass="org.teotigraphix.ui.skins.controlSupport.CloseButtonSkin"
+					  width="13" height="13"/>
+			
+		</s:HGroup>
+		
+	</s:HGroup>
+	
+</s:Skin>

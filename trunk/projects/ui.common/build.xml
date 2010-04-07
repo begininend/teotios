@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<project name="ui.common" basedir="." default="init">
+	
+	<!-- Import the properties file -->
+	<property file="${basedir}/build/build.properties"/>
+	
+	<!-- Build order -->
+	<target name="init" depends="compile,asdoc,package"/>
+	
+	<!-- Compile SWC -->
+	<target name="compile">
+		
+		<exec executable="${compc.exe}">
+			
+			<!-- Specify the name of the output file -->
+			<arg line="-output '${project.swc}'"/>
+
+			<!-- Specify the source files for this library -->
+			<arg line="-source-path '${main.src.dir}'"/>
+				
+			<!-- Specify the manifest.xml file and namespace to use -->
+			<arg line="-namespace+=http://tx.teotigraphix.org/flex4,${basedir}/manifest.xml"/>
+			<arg line="-include-namespaces http://tx.teotigraphix.org/flex4"/>
+
+			<!-- create a link report 
+			<arg line="-link-report ${basedir}/deployed/link-report.xml"/>
+			-->
+			
+			<arg value="-static-link-runtime-shared-libraries=true"/>
+			
+		</exec>	
+	
+	</target>
+	
+	<!-- Create ASDocs -->
+	<target name="asdoc">
+		
+		<exec executable="${asdoc.exe}">
+			
+			<arg line="-doc-sources ${main.src.dir}"/>
+			<arg line="-source-path ${main.src.dir}"/>
+			<arg line="-output ${doc.dir}"/>
+			<arg line="-window-title 'ui.common ${ui.common.version}'"/>
+			<arg line="-main-title 'ui.common ${ui.common.version}'"/>
+			<arg line="-footer 'ui.common - http://www.teotigraphix.org/ui-common'"/>
+			<arg line="-namespace+=http://tx.teotigraphix.org/flex4,${basedir}/manifest.xml"/>
+
+		</exec>
+
+	</target>
+	
+	<!-- Package the Build -->
+  	<target name="package">
+		<tstamp>
+			<format property="touch.time" pattern="MM/dd/yyyy hh:mm aa" unit="hour"/>
+		</tstamp>
+		<mkdir dir="${deployed.dir}"/>
+		<mkdir dir="${deployed.temp.dir}"/>
+		<mkdir dir="${deployed.temp.dir}/bin"/>
+		<mkdir dir="${deployed.temp.dir}/src"/>
+		<copy file="${bin.dir}/${project.name.version}.swc" todir="${deployed.temp.dir}/bin"/>
+		<copy todir="${deployed.temp.dir}/src/org">
+			<fileset dir="${main.src.dir}/org"/>
+		</copy>
+		<copy todir="${deployed.temp.dir}/docs">
+			<fileset dir="${deployed.dir}"/>
+		</copy>
+		<!-- Copy LICENSE -->
+		<copy file="${basedir}/build/LICENSE.txt" tofile="${deployed.temp.dir}/build/LICENSE.txt" overwrite="true"/>
+		<!-- Zip It -->
+		<zip destfile="${deployed.dir}/${project.name.version}.zip">
+			<fileset dir="${deployed.temp.dir}"/>
+		</zip>
+		<!-- Clean Up -->
+		<delete dir="${deployed.temp.dir}"/>
+
+	</target>
+
+</project>
