@@ -1,5 +1,17 @@
 ui.common Framework Changelog:
 
-v0.9
+= v0.9.3 04-07-2010 =
 
   * Released
+  * Base Components included
+    * Button
+    * ComponentBorder
+    * DataControl
+    * StatusBar
+    * TitleBar
+    * TitleContainer
+  * Base Layouts included
+    * ButtonBarHorizontalLayout
+    * ButtonBarVerticalLayout
+
+Note: versions prior were internal development

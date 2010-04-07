@@ -63,7 +63,7 @@
 			<fileset dir="${main.src.dir}/org"/>
 		</copy>
 		<copy todir="${deployed.temp.dir}/docs">
-			<fileset dir="${deployed.dir}"/>
+			<fileset dir="${doc.dir}"/>
 		</copy>
 		<!-- Copy LICENSE -->
 		<copy file="${basedir}/build/LICENSE.txt" tofile="${deployed.temp.dir}/build/LICENSE.txt" overwrite="true"/>
