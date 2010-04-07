@@ -26,6 +26,7 @@ import mx.core.UIComponent;
 
 import org.teotigraphix.ui.api.ITitleBar;
 import org.teotigraphix.ui.api.ITitleContainer;
+import org.teotigraphix.ui.api.control.IBar;
 import org.teotigraphix.ui.core.BarPlacement;
 import org.teotigraphix.ui.events.TitleBarEvent;
 import org.teotigraphix.ui.events.TitleContainerEvent;
@@ -43,24 +44,28 @@ import spark.components.supportClasses.ButtonBase;
 //--------------------------------------
 
 /**
- * @eventType org.teotigraphix.ui.events.TitleContainerEvent.ICON_CLICK
+ * @eventType com.teotigraphix.ui.events.TitleContainerEvent.ICON_CLICK
  */
 [Event(name="iconClick",type="org.teotigraphix.ui.events.TitleContainerEvent")]
 
 /**
- * @eventType org.teotigraphix.ui.events.TitleContainerEvent.MINIMIZE_BUTTON_CLICK
+ * @eventType com.teotigraphix.ui.events.TitleContainerEvent.MINIMIZE_BUTTON_CLICK
  */
 [Event(name="minimizeClick",type="org.teotigraphix.ui.events.TitleContainerEvent")]
 
 /**
- * @eventType org.teotigraphix.ui.events.TitleContainerEvent.MAXIMIZE_BUTTON_CLICK
+ * @eventType com.teotigraphix.ui.events.TitleContainerEvent.MAXIMIZE_BUTTON_CLICK
  */
-[Event(name="maximizeClick",type="org.teotigraphix.ui.events.DisplayButtonEvent")]
+[Event(name="maximizeClick",type="org.teotigraphix.ui.events.TitleContainerEvent")]
 
 /**
- * @eventType org.teotigraphix.ui.events.TitleContainerEvent.CLOSE_BUTTON_CLICK
+ * @eventType com.teotigraphix.ui.events.TitleContainerEvent.CLOSE_BUTTON_CLICK
  */
 [Event(name="closeClick",type="org.teotigraphix.ui.events.TitleContainerEvent")]
+
+//--------------------------------------
+//  Class
+//--------------------------------------
 
 /**
  * The <code>TitleContainerBase</code> class is a conent container with a 
@@ -74,16 +79,21 @@ import spark.components.supportClasses.ButtonBase;
 public class TitleContainerBase extends ContainerBase 
 	implements ITitleContainer
 {
+	//--------------------------------------------------------------------------
+	//
+	//  Private :: Variables
+	//
+	//--------------------------------------------------------------------------
+	
+	/**
+	 * @private
+	 */
 	private var titleBarDisplayChanged:Boolean = false;
 	
-	private function invalidateTitleBar():void
-	{
-		if (titleBarDisplayChanged)
-			return;
-		
-		titleBarDisplayChanged = true;
-		invalidateProperties();
-	}
+	/**
+	 * @private
+	 */
+	private var buttonVisibilityChanged:Boolean = false;
 	
 	//--------------------------------------------------------------------------
 	//
@@ -95,7 +105,7 @@ public class TitleContainerBase extends ContainerBase
 	//  titleBarDisplay
 	//----------------------------------
 	
-	[SkinPart(type="org.teotigraphix.ui.api.ITitleBar", required="true")]
+	[SkinPart(required="true")]
 	
 	/**
 	 * The <code>ITitleBar</code> skin part.
@@ -106,7 +116,7 @@ public class TitleContainerBase extends ContainerBase
 	//  statusBarDisplay
 	//----------------------------------
 	
-	//	[SkinPart(type="org.teotigraphix.ui.api.IStatusBar", required="true")]
+	//	[SkinPart(required="true")]
 	
 	/**
 	 * The <code>IStatusBar</code> skin part.
@@ -122,6 +132,8 @@ public class TitleContainerBase extends ContainerBase
 	//----------------------------------
 	//  titleIcon
 	//----------------------------------
+	
+	[Inspectable(category="General")]
 	
 	/**
 	 * @private
@@ -159,6 +171,8 @@ public class TitleContainerBase extends ContainerBase
 	 */
 	private var _title:String;
 	
+	[Inspectable(category="General")]
+	
 	/**
 	 * @copy org.teotigraphix.ui.api.ITitleBar#title
 	 * @mxml
@@ -185,24 +199,19 @@ public class TitleContainerBase extends ContainerBase
 	//  showMinimizeButton
 	//----------------------------------
 	
-	private var buttonVisibilityChanged:Boolean = false;
-	
-	private function invalidateButtonVisibility():void
-	{
-		if (buttonVisibilityChanged)
-			return;
-		
-		buttonVisibilityChanged = true;
-		invalidateProperties();
-	}
-	
 	/**
 	 * @private
 	 */
 	private var _showMinimizeButton:Boolean;
 	
+	[Inspectable(category="General")]
+	
 	/**
-	 * TODO Document
+	 * Shows or hides the <code>minimizeButtonDisplay</code> on the
+	 * <code>titleBarDisplay</code> skin part.
+	 * 
+	 * @mxml
+	 * @default false
 	 */
 	public function get showMinimizeButton():Boolean
 	{
@@ -231,8 +240,14 @@ public class TitleContainerBase extends ContainerBase
 	 */
 	private var _showMaximizeButton:Boolean;
 	
+	[Inspectable(category="General")]
+	
 	/**
-	 * TODO Document
+	 * Shows or hides the <code>maximizeButtonDisplay</code> on the
+	 * <code>titleBarDisplay</code> skin part.
+	 * 
+	 * @mxml
+	 * @default false
 	 */
 	public function get showMaximizeButton():Boolean
 	{
@@ -261,8 +276,14 @@ public class TitleContainerBase extends ContainerBase
 	 */
 	private var _showCloseButton:Boolean;
 	
+	[Inspectable(category="General")]
+	
 	/**
-	 * TODO Document
+	 * Shows or hides the <code>closeButtonDisplay</code> on the
+	 * <code>titleBarDisplay</code> skin part.
+	 * 
+	 * @mxml
+	 * @default false
 	 */
 	public function get showCloseButton():Boolean
 	{
@@ -293,7 +314,7 @@ public class TitleContainerBase extends ContainerBase
 	//----------------------------------
 	
 	/**
-	 * @copy com.teotigraphix.ui.api.ITitleContainer#titleBar
+	 * @copy org.teotigraphix.ui.api.ITitleContainer#titleBar
 	 */
 	public function get titleBar():ITitleBar
 	{
@@ -320,6 +341,8 @@ public class TitleContainerBase extends ContainerBase
 	 * @private
 	 */
 	private var _showTitleBar:Boolean = true;
+	
+	[Inspectable(category="General")]
 	
 	/**
 	 * @copy org.teotigraphix.ui.api.ITitleContainer#showTitleBar
@@ -348,6 +371,8 @@ public class TitleContainerBase extends ContainerBase
 	 * @private
 	 */
 	private var _showStatusBar:Boolean;
+	
+	[Inspectable(category="General")]
 	
 	/**
 	 * @copy org.teotigraphix.ui.api.ITitleContainer#showStatusBar
@@ -401,6 +426,8 @@ public class TitleContainerBase extends ContainerBase
 	 */
 	private var _titleBarPlacement:String = BarPlacement.TOP;
 	
+	[Inspectable(category="General",enumeration="top,right,bottom,left")]
+	
 	/**
 	 * @copy org.teotigraphix.ui.api.ITitleContainer#titleBarPlacement
 	 * @mxml
@@ -415,7 +442,12 @@ public class TitleContainerBase extends ContainerBase
 	 */
 	public function set titleBarPlacement(value:String):void
 	{
+		if (_titleBarPlacement == value)
+			return;
+		
 		_titleBarPlacement = value;
+		
+		commitTitleBarPlacement();
 	}
 	
 	//--------------------------------------------------------------------------
@@ -452,7 +484,7 @@ public class TitleContainerBase extends ContainerBase
 		
 		if (titleBarDisplayChanged)
 		{
-			commitTitleBarDisplay();
+			commitTitleBarProperties();
 			titleBarDisplayChanged = false;
 		}
 		
@@ -479,8 +511,9 @@ public class TitleContainerBase extends ContainerBase
 		if (instance == titleBarDisplay)
 		{
 			addTitleBarHandlers(titleBarDisplay);
-			commitTitleBarDisplay();
+			commitTitleBarProperties();
 			commitButtonVisibility();
+			commitTitleBarPlacement();
 		}
 		else if (instance == contentGroup)
 		{
@@ -519,7 +552,7 @@ public class TitleContainerBase extends ContainerBase
 	/**
 	 * Commits the <code>titleBarDisplay</code> composite.
 	 */
-	protected function commitTitleBarDisplay():void
+	protected function commitTitleBarProperties():void
 	{
 		if (!titleBarDisplay)
 			return;
@@ -556,6 +589,24 @@ public class TitleContainerBase extends ContainerBase
 	}
 	
 	/**
+	 * Commits the <code>titleBarPlacement</code> property.
+	 */
+	protected function commitTitleBarPlacement():void
+	{
+		if (!titleBarDisplay)
+			return;
+		
+		if (titleBarDisplay is IBar)
+			IBar(titleBarDisplay).placement = _titleBarPlacement;
+		
+		if (skin)
+		{
+			skin.invalidateSize();
+			skin.invalidateDisplayList();
+		}
+	}
+	
+	/**
 	 * Commits the <code>statusBarDisplay</code> composite.
 	 */
 	protected function commitStatusBarDisplay():void
@@ -567,6 +618,54 @@ public class TitleContainerBase extends ContainerBase
 	//  Protected :: Methods
 	//
 	//--------------------------------------------------------------------------
+	
+	/**
+	 * @private
+	 */
+	protected function invalidateTitleBar():void
+	{
+		if (titleBarDisplayChanged)
+			return;
+		
+		titleBarDisplayChanged = true;
+		invalidateProperties();
+	}
+	
+	/**
+	 * @private
+	 */	
+	protected function invalidateButtonVisibility():void
+	{
+		if (buttonVisibilityChanged)
+			return;
+		
+		buttonVisibilityChanged = true;
+		invalidateProperties();
+	}
+	
+	/**
+	 * Called when the <code>minimizeButtonDisplay</code> of the 
+	 * <code>titleBarDisplay</code> has been clicked.
+	 */
+	protected function minimizeClick():void
+	{
+	}
+	
+	/**
+	 * Called when the <code>maximizeButtonDisplay</code> of the 
+	 * <code>titleBarDisplay</code> has been clicked.
+	 */
+	protected function maximizeClick():void
+	{
+	}
+	
+	/**
+	 * Called when the <code>closeButtonDisplay</code> of the 
+	 * <code>titleBarDisplay</code> has been clicked.
+	 */
+	protected function closeClick():void
+	{
+	}
 	
 	/**
 	 * Add <code>TitleBarEvent</code> handlers to a button.
@@ -612,7 +711,7 @@ public class TitleContainerBase extends ContainerBase
 		var type:String = getTitleBarEventType(event.button);
 		
 		var e:TitleContainerEvent = new TitleContainerEvent(
-			type, false, false, 
+			type, false, true, 
 			event.button, event.selected);
 		
 		dispatchEvent(e);
@@ -632,30 +731,6 @@ public class TitleContainerBase extends ContainerBase
 					break;
 			}
 		}
-	}
-	
-	/**
-	 * Called when the <code>minimizeButtonDisplay</code> of the 
-	 * <code>titleBarDisplay</code> has been clicked.
-	 */
-	protected function minimizeClick():void
-	{
-	}
-	
-	/**
-	 * Called when the <code>maximizeButtonDisplay</code> of the 
-	 * <code>titleBarDisplay</code> has been clicked.
-	 */
-	protected function maximizeClick():void
-	{
-	}
-	
-	/**
-	 * Called when the <code>closeButtonDisplay</code> of the 
-	 * <code>titleBarDisplay</code> has been clicked.
-	 */
-	protected function closeClick():void
-	{
 	}
 	
 	//--------------------------------------------------------------------------

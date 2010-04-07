@@ -41,7 +41,9 @@ public interface ITitleBar
 	//----------------------------------
 	
 	/**
-	 * The iconic representation of the client context.
+	 * The graphical representation of the client context.
+	 * 
+	 * @productversion 1.0
 	 */
 	function get titleIcon():Class;
 	
@@ -56,6 +58,8 @@ public interface ITitleBar
 	
 	/**
 	 * The textual representation of the client context.
+	 * 
+	 * @productversion 1.0
 	 */
 	function get title():String;
 	
@@ -70,6 +74,8 @@ public interface ITitleBar
 	
 	/**
 	 * Whether to show the <code>minimizeButtonDisplay</code> of the title bar.
+	 * 
+	 * @productversion 1.0
 	 */
 	function get showMinimizeButton():Boolean;
 	
@@ -84,6 +90,8 @@ public interface ITitleBar
 	
 	/**
 	 * Whether to show the <code>maximizeButtonDisplay</code> of the title bar.
+	 * 
+	 * @productversion 1.0
 	 */
 	function get showMaximizeButton():Boolean;
 	
@@ -98,6 +106,8 @@ public interface ITitleBar
 	
 	/**
 	 * Whether to show the <code>closeButtonDisplay</code> of the title bar.
+	 * 
+	 * @productversion 1.0
 	 */
 	function get showCloseButton():Boolean;
 	

@@ -106,19 +106,16 @@
 			</s:layout.horizontal>
 			
 			<s:layout.vertical>
-				<s:VerticalLayout horizontalAlign="center"/>
+				<s:VerticalLayout/>
 			</s:layout.vertical>
 			
 			<!--- The <code>title</code> display string. -->
 			<s:Label id="labelDisplay" 
 					 fontWeight="bold"
-					 minWidth="10"
+					 baselineShift="-3"
 					 maxDisplayedLines="1"
 					 width="100%"
-					 width.vertical="1"
-					 textAlign.vertical="right"
-					 rotation.vertical="-90"
-					 height.vertical="100%"/>	
+					 rotation.vertical="-90"/>	
 			
 		</s:Group>
 		
