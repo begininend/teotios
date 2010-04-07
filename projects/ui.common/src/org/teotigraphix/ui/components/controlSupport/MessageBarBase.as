@@ -20,6 +20,10 @@
 package org.teotigraphix.ui.components.controlSupport
 {
 
+import mx.core.IVisualElement;
+
+import org.teotigraphix.ui.utils.IconUtil;
+
 import spark.components.supportClasses.TextBase;
 import spark.primitives.BitmapImage;
 
@@ -48,10 +52,14 @@ public class MessageBarBase extends BarBase
 	[SkinPart(required="false")]
 	
 	/**
-	 * The <code>BitmapImage</code> skin part that displays the 
+	 * The <code>IVisualElement</code> skin part that displays the 
 	 * <code>icon</code> Class.
+	 * 
+	 * <p>Note: This skin part is typed IVisualElement so you are not required
+	 * to use BitmapImage or Image. The component will attempt to set a source
+	 * property on the skin part.</p>
 	 */
-	public var iconDisplay:BitmapImage; // change type to IVisualElement
+	public var iconDisplay:IVisualElement;
 	
 	//----------------------------------
 	//  labelDisplay
@@ -199,12 +207,7 @@ public class MessageBarBase extends BarBase
 		if (!iconDisplay)
 			return;
 		
-		iconDisplay.source = _icon;
-		
-		// XXX Use IconUtil.setSource()
-		var show:Boolean = (_icon != null);
-		iconDisplay.visible = show;
-		iconDisplay.includeInLayout = show;
+		IconUtil.setSource(iconDisplay, _icon, true); 
 	}	
 }
 }

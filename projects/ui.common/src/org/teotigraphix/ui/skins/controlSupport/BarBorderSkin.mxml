@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+// Copyright 2010 Michael Schmalle - Teoti Graphix, LLC
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+// http://www.apache.org/licenses/LICENSE-2.0 
+// 
+// Unless required by applicable law or agreed to in writing, software 
+// distributed under the License is distributed on an "AS IS" BASIS, 
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and 
+// limitations under the License
+// 
+// Author: Michael Schmalle, Principal Architect
+// mschmalle at teotigraphix dot com
+-->
+<!--- 
+* The border skin for the default TitleBar component.
+* 
+* @author Michael Schmalle
+* @copyright Teoti Graphix, LLC
+* @productversion 1.0
+-->
+<s:Skin xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" 
+		xmlns:mx="library://ns.adobe.com/flex/mx"
+		currentStateChange="currentStateChangeHandler(event)">
+	
+	<!-- host component -->
+	<fx:Metadata>
+		[HostComponent("org.teotigraphix.ui.components.ComponentBorder")]
+	</fx:Metadata>
+	
+	<!-- states -->
+	<s:states>
+		<s:State name="normal"/>
+		<s:State name="right"/>
+		<s:State name="bottom"/>
+		<s:State name="left"/>
+		<s:State name="disabled"/>
+	</s:states>
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.events.StateChangeEvent;
+			
+			import org.teotigraphix.ui.components.containerSupport.TitleContainerBase;
+			import org.teotigraphix.ui.core.BarPlacement;
+			
+			// XXX make a base class for this Skin
+			
+			private function getContainer():TitleContainerBase
+			{
+				var parent:Object = this;
+				while(parent != null)
+				{
+					if (parent is TitleContainerBase)
+						return parent as TitleContainerBase;
+					
+					parent = parent.parent;
+				}
+				return null;
+			}
+			
+			/**
+			 * @private
+			 */
+			override protected function updateDisplayList(unscaledWidth:Number, 
+														  unscaledHeight:Number):void
+			{
+				var tl:Number = getOwnerStyle("topLeftRadius");
+				var tr:Number = getOwnerStyle("topRightRadius");
+				var br:Number = getOwnerStyle("bottomRightRadius");
+				var bl:Number = getOwnerStyle("bottomLeftRadius");
+				
+				var container:TitleContainerBase = getContainer();
+				if (container)
+				{
+					var cr:Number = container.getStyle("cornerRadius");
+					
+					switch (container.titleBarPlacement)
+					{
+						case BarPlacement.TOP:
+							tr = tl = cr;
+							br = bl = 0;
+							break;
+						case BarPlacement.BOTTOM:
+							tr = tl = 0;
+							br = bl = cr;
+							break;
+						case BarPlacement.LEFT:
+							tl = bl = cr;
+							tr = br = 0;
+							break;
+						case BarPlacement.RIGHT:
+							tl = bl = 0;
+							tr = br = cr;
+							break;						
+					}
+				}				
+				
+				var colors:Array = getOwnerStyle("barColors");
+				if (colors[0] != fillOne.color)
+					fillOne.color = colors[0];
+				if (colors[1] != fillTwo.color)
+					fillTwo.color = colors[1];
+				
+				var alphas:Array = getOwnerStyle("barAlphas");
+				if (alphas[0] != fillOne.alpha)
+					fillOne.alpha = alphas[0];
+				if (alphas[1] != fillTwo.alpha)
+					fillTwo.alpha = alphas[1];
+				
+				var hcolors:Array = getOwnerStyle("barHighlightColors");
+				if (hcolors[0] != highlightFillOne.color)
+					highlightFillOne.color = hcolors[0];
+				if (hcolors[1] != highlightFillTwo.color)
+					highlightFillTwo.color = hcolors[1];
+				
+				var halphas:Array = getOwnerStyle("barHighlightAlphas");
+				if (halphas[0] != highlightFillOne.alpha)
+					highlightFillOne.alpha = halphas[0];
+				if (halphas[1] != highlightFillTwo.alpha)
+					highlightFillTwo.alpha = halphas[1];				
+				
+				dividerFill.color = getOwnerStyle("barDividerColor");
+				
+				setBorderRadii(tl, tr, br, bl);
+				
+				switch (currentState)
+				{
+					case "normal":
+						
+						fillFill.rotation = highlightFill.rotation = 90;
+						divider.top = NaN;
+						divider.height = 1;
+						divider.left = divider.right = divider.bottom = 0;
+						break;
+					case "bottom":
+						
+						fillFill.rotation = highlightFill.rotation = 90;
+						divider.bottom = NaN;
+						divider.height = 1;
+						divider.left = divider.right = divider.top = 0;
+						break;
+					case "left":
+						
+						fillFill.rotation = highlightFill.rotation = 0;
+						divider.left = NaN;
+						divider.width = 1;
+						divider.right = divider.bottom = divider.top = 0;
+						break;
+					case "right":
+						
+						fillFill.rotation = highlightFill.rotation = 0;
+						divider.right = NaN;
+						divider.width = 1;
+						divider.left = divider.bottom = divider.top = 0;
+						break;					
+				}
+				
+				super.updateDisplayList(unscaledWidth, unscaledHeight);
+			}
+			
+			
+			private function setBorderRadii(tl:Number, tr:Number, 
+											br:Number, bl:Number):void
+			{
+				highlight.topLeftRadiusX = tl;
+				highlight.topRightRadiusX = tr;
+				highlight.bottomRightRadiusX = br;
+				highlight.bottomLeftRadiusX = bl;
+				
+				fill.topLeftRadiusX = tl;
+				fill.topRightRadiusX = tr;
+				fill.bottomRightRadiusX = br;
+				fill.bottomLeftRadiusX = bl;
+				
+				fillHighlight.topLeftRadiusX = tl;
+				fillHighlight.topRightRadiusX = tr;
+				fillHighlight.bottomRightRadiusX = br;
+				fillHighlight.bottomLeftRadiusX = bl;
+			}
+			
+			protected function getOwnerStyle(styleProp:String):*
+			{
+				return IStyleClient(hostComponent.owner).getStyle(styleProp);
+			}
+			
+			
+			protected function currentStateChangeHandler(event:StateChangeEvent):void
+			{
+				invalidateDisplayList();
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<!--
+	* hightlight
+	* fill
+	* lowlight
+	* highlight
+	* divider
+	-->
+	
+	<!-- =================================================================== -->
+	<!-- Bar Highlight                                                       -->
+	<!-- =================================================================== -->
+	
+	<s:Rect id="highlight" 
+			left="0" right="0" top="0" bottom="0">
+		<s:fill>
+			<s:LinearGradient id="highlightFill" rotation="90">
+				<s:GradientEntry id="highlightFillOne"/>
+				<s:GradientEntry id="highlightFillTwo"/>
+			</s:LinearGradient>
+		</s:fill>
+	</s:Rect>
+	
+	<!-- =================================================================== -->
+	<!-- Bar Fill                                                            -->
+	<!-- =================================================================== -->
+	
+	<s:Rect id="fill"
+			top="1" right="1" bottom="1" left="1">
+		<s:fill>
+			<s:LinearGradient id="fillFill" rotation="90">
+				<s:GradientEntry id="fillOne"/>
+				<s:GradientEntry id="fillTwo"/>
+			</s:LinearGradient>
+		</s:fill>
+	</s:Rect>
+	
+	<!-- =================================================================== -->
+	<!-- Fill Lowlight                                                       -->
+	<!-- =================================================================== -->
+	
+	<s:Rect left="1" right="1" bottom="1" height="9">
+		<s:fill>
+			<s:LinearGradient rotation="90">
+				<s:GradientEntry color="0x000000" alpha="0.0099" />
+				<s:GradientEntry color="0x000000" alpha="0.0627" />
+			</s:LinearGradient>
+		</s:fill>
+	</s:Rect>
+	
+	<!-- =================================================================== -->
+	<!-- Fill Highlight                                                      -->
+	<!-- =================================================================== -->
+	
+	<s:Rect id="fillHighlight" 
+			left="1" right="1" top="1" height="9">
+		<s:fill>
+			<s:SolidColor color="0xFFFFFF" alpha="0.33"/>
+		</s:fill>
+	</s:Rect>
+	
+	<!-- =================================================================== -->
+	<!-- Bar Divider                                                         -->
+	<!-- =================================================================== -->
+	
+	<s:Rect id="divider" 
+			left="0" right="0" height="1" bottom="0">
+		<s:fill>
+			<s:SolidColor id="dividerFill"/>
+		</s:fill>
+	</s:Rect>
+	
+</s:Skin>

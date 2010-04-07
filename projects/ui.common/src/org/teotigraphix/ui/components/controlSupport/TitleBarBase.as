@@ -23,6 +23,8 @@ package org.teotigraphix.ui.components.controlSupport
 import flash.events.IEventDispatcher;
 import flash.events.MouseEvent;
 
+import mx.core.IVisualElement;
+
 import org.teotigraphix.ui.api.ITitleBar;
 import org.teotigraphix.ui.events.TitleBarEvent;
 
@@ -32,6 +34,17 @@ import spark.components.supportClasses.ToggleButtonBase;
 import spark.primitives.BitmapImage;
 
 //--------------------------------------
+//  Styles
+//--------------------------------------
+
+/**
+ * The gap between the titlebar's buttons.
+ * 
+ * @mxml 1
+ */
+[Style(name="buttonGap",type="int",format="Length")]
+
+//--------------------------------------
 //  Events
 //--------------------------------------
 
@@ -39,6 +52,10 @@ import spark.primitives.BitmapImage;
  * @eventType org.teotigraphix.ui.events.TitleBarEvent#BUTTON_CLICK
  */
 [Event(name="buttonClick",type="org.teotigraphix.ui.events.TitleBarEvent")]
+
+//--------------------------------------
+//  Class
+//--------------------------------------
 
 /**
  * The TitleBarBase class is a concrete implementation of the 
@@ -50,61 +67,22 @@ import spark.primitives.BitmapImage;
  * TitleBar will give greater flexibility with styling and skinning.</p>
  * 
  * <p>The TitleBarBase class does not implement the 
- * <code>ControlBarBase#contentGroup</code>, it's children are basically
+ * <code>ComponentBase#contentGroup</code>, it's children are basically
  * chrome children with no dynamic content.</p>
  * 
  * @author Michael Schmalle
  * @copyright Teoti Graphix, LLC
  * @productversion 1.0
+ * 
  * @mxml
  */
-public class TitleBarBase extends BarBase implements ITitleBar
+public class TitleBarBase extends MessageBarBase implements ITitleBar
 {
-	//--------------------------------------------------------------------------
-	//
-	//  Private :: Variables
-	//
-	//--------------------------------------------------------------------------
-	
-	/**
-	 * @private
-	 */
-	private var titlePropertiesChanged:Boolean = false;
-	
-	/**
-	 * @private
-	 */
-	private var buttonsChanged:Boolean = false;
-	
 	//--------------------------------------------------------------------------
 	//
 	//  Public SkinPart :: Variables
 	//
 	//--------------------------------------------------------------------------
-	
-	//----------------------------------
-	//  titleIconDisplay
-	//----------------------------------
-	
-	[SkinPart(required="false")]
-	
-	/**
-	 * The <code>BitmapImage</code> skin part that displays the 
-	 * <code>titleIcon</code> Class.
-	 */
-	public var titleIconDisplay:BitmapImage;
-	
-	//----------------------------------
-	//  titleDisplay
-	//----------------------------------
-	
-	[SkinPart(required="true")]
-	
-	/**
-	 * The <code>TextBase</code> skin part that displays the <code>title</code> 
-	 * string.
-	 */
-	public var titleDisplay:TextBase;
 	
 	//----------------------------------
 	//  minimizeButtonDisplay
@@ -153,17 +131,12 @@ public class TitleBarBase extends BarBase implements ITitleBar
 	//----------------------------------
 	
 	/**
-	 * @private
-	 */
-	private var _titleIcon:Class;
-	
-	/**
 	 * @copy org.teotigraphix.ui.api.ITitleBar#titleIcon
 	 * @mxml null
 	 */
 	public function get titleIcon():Class
 	{
-		return _titleIcon;
+		return super.icon;
 	}
 	
 	/**
@@ -171,13 +144,7 @@ public class TitleBarBase extends BarBase implements ITitleBar
 	 */
 	public function set titleIcon(value:Class):void
 	{
-		if (_titleIcon == value)
-			return;
-		
-		_titleIcon = value;
-		
-		titlePropertiesChanged = true;
-		invalidateProperties();
+		super.icon = value;
 	}
 	
 	//----------------------------------
@@ -185,17 +152,12 @@ public class TitleBarBase extends BarBase implements ITitleBar
 	//----------------------------------
 	
 	/**
-	 * @private
-	 */
-	private var _title:String;
-	
-	/**
 	 * @copy org.teotigraphix.ui.api.ITitleBar#title
 	 * @mxml
 	 */
 	public function get title():String
 	{
-		return _title;
+		return super.label;
 	}
 	
 	/**
@@ -203,13 +165,7 @@ public class TitleBarBase extends BarBase implements ITitleBar
 	 */
 	public function set title(value:String):void
 	{
-		if (_title == value)
-			return;
-		
-		_title = value;
-		
-		titlePropertiesChanged = true;
-		invalidateProperties();
+		super.label = value;
 	}
 	
 	//----------------------------------
@@ -240,8 +196,7 @@ public class TitleBarBase extends BarBase implements ITitleBar
 		
 		_showMinimizeButton = value;
 		
-		buttonsChanged = true;
-		invalidateProperties();
+		setButtonVisibility(minimizeButtonDisplay, _showMinimizeButton);
 	}
 	
 	//----------------------------------
@@ -272,8 +227,7 @@ public class TitleBarBase extends BarBase implements ITitleBar
 		
 		_showMaximizeButton = value;
 		
-		buttonsChanged = true;
-		invalidateProperties();
+		setButtonVisibility(maximizeButtonDisplay, _showMaximizeButton);
 	}
 	
 	//----------------------------------
@@ -304,8 +258,7 @@ public class TitleBarBase extends BarBase implements ITitleBar
 		
 		_showCloseButton = value;
 		
-		buttonsChanged = true;
-		invalidateProperties();
+		setButtonVisibility(closeButtonDisplay, _showCloseButton);
 	}
 	
 	//--------------------------------------------------------------------------
@@ -333,19 +286,7 @@ public class TitleBarBase extends BarBase implements ITitleBar
 	 */
 	override protected function commitProperties():void
 	{
-		super.commitProperties();
-		
-		if (titlePropertiesChanged)
-		{
-			commitTitleProperties();
-			titlePropertiesChanged = false;
-		}
-		
-		if (buttonsChanged)
-		{
-			commitButtonVisibilities();
-			buttonsChanged = false;
-		}		
+		super.commitProperties();	
 	}
 	
 	/**
@@ -355,24 +296,20 @@ public class TitleBarBase extends BarBase implements ITitleBar
 	{
 		super.partAdded(partName, instance);
 		
-		if (instance == titleIconDisplay || instance == titleDisplay)
-		{
-			commitTitleProperties();
-		}
-		else if (instance == minimizeButtonDisplay)
+		if (instance == minimizeButtonDisplay)
 		{
 			addButtonClickHandlers(minimizeButtonDisplay);
-			commitButtonVisibilities();
+			setButtonVisibility(minimizeButtonDisplay, _showMinimizeButton);
 		}
 		else if (instance == maximizeButtonDisplay)
 		{
 			addButtonClickHandlers(maximizeButtonDisplay);
-			commitButtonVisibilities();
+			setButtonVisibility(maximizeButtonDisplay, _showMaximizeButton);
 		}
 		else if (instance == closeButtonDisplay)
 		{
 			addButtonClickHandlers(closeButtonDisplay);
-			commitButtonVisibilities();
+			setButtonVisibility(closeButtonDisplay, _showCloseButton);
 		}
 	}
 	
@@ -383,13 +320,7 @@ public class TitleBarBase extends BarBase implements ITitleBar
 	{
 		super.partRemoved(partName, instance);
 		
-		if (instance == titleIconDisplay)
-		{
-		}
-		else if (instance == titleDisplay)
-		{
-		}
-		else if (instance == minimizeButtonDisplay)
+		if (instance == minimizeButtonDisplay)
 		{
 			removeButtonClickHandlers(minimizeButtonDisplay);
 		}
@@ -409,42 +340,24 @@ public class TitleBarBase extends BarBase implements ITitleBar
 	//
 	//--------------------------------------------------------------------------
 	
-	protected function commitTitleProperties():void
+	/**
+	 * Sets a button visibility using the show properties.
+	 * 
+	 * <p>Sets the <code>visble</code> and <code>includeInLayout</code> 
+	 * properties of the button.</p>
+	 * 
+	 * @param button The button instance.
+	 * @param visible A boolean indicating whether the button is added or
+	 * removed from layout.
+	 */
+	protected function setButtonVisibility(button:IVisualElement,
+										   visible:Boolean):void
 	{
-		if (titleIconDisplay)
-		{
-			titleIconDisplay.source = _titleIcon;
-			
-			var show:Boolean = (_titleIcon != null);
-			titleIconDisplay.visible = show;
-			titleIconDisplay.includeInLayout = show;
-		}
+		if (!button)
+			return;
 		
-		if (titleDisplay)
-		{
-			titleDisplay.text = _title;
-		}
-	}	
-	
-	protected function commitButtonVisibilities():void
-	{
-		if (minimizeButtonDisplay)
-		{
-			minimizeButtonDisplay.visible = _showMinimizeButton;
-			minimizeButtonDisplay.includeInLayout = _showMinimizeButton;
-		}
-		
-		if (maximizeButtonDisplay)
-		{
-			maximizeButtonDisplay.visible = _showMaximizeButton;
-			maximizeButtonDisplay.includeInLayout = _showMaximizeButton;
-		}
-		
-		if (closeButtonDisplay)
-		{
-			closeButtonDisplay.visible = _showCloseButton;
-			closeButtonDisplay.includeInLayout = _showCloseButton;
-		}
+		button.visible = visible;
+		button.includeInLayout = visible;
 	}
 	
 	//--------------------------------------------------------------------------
@@ -483,7 +396,7 @@ public class TitleBarBase extends BarBase implements ITitleBar
 	 * Handles the <code>MouseEvent.CLICK</code> event on a button.
 	 * 
 	 * @param event A <code>MouseEvent</code>.
-	 * @event com.teotigraphix.ui.events.TitleBarEvent#BUTTON_CLICK
+	 * @event org.teotigraphix.ui.events.TitleBarEvent#BUTTON_CLICK
 	 */
 	protected function button_clickHandler(event:MouseEvent):void
 	{
