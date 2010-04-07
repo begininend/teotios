@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+// Copyright 2010 Michael Schmalle - Teoti Graphix, LLC
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+// http://www.apache.org/licenses/LICENSE-2.0 
+// 
+// Unless required by applicable law or agreed to in writing, software 
+// distributed under the License is distributed on an "AS IS" BASIS, 
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and 
+// limitations under the License
+// 
+// Author: Michael Schmalle, Principal Architect
+// mschmalle at teotigraphix dot com
+-->
+<!--- 
+* The default <code>skinClass</code> for the <code>StatusBar</code>.
+* 
+* <ul>
+* <li>borderDisplay - skinnable border background</li>
+* <li>statusDisplay - status pushed into text property</li>
+* <li>statusIconDisplay - statusIcon pushed into source property</li>
+* </ul>
+* 
+* @author Michael Schmalle
+* @copyright Teoti Graphix, LLC
+* @productversion 1.0
+-->
+<s:Skin xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" 
+		xmlns:mx="library://ns.adobe.com/flex/mx"
+		xmlns:tx="http://tx.teotigraphix.org/flex4">
+	
+	<fx:Metadata>
+		[HostComponent("org.teotigraphix.ui.components.StatusBar")]
+	</fx:Metadata>
+	
+	<!-- states -->
+	<s:states>
+		<s:State name="normal" stateGroups="horizontal"/>
+		<s:State name="bottom" stateGroups="horizontal"/>
+		<s:State name="right" stateGroups="vertical"/>
+		<s:State name="left" stateGroups="vertical"/>
+		<s:State name="disabled"/>
+	</s:states>
+	
+	<!--
+	* - borderDisplay
+	* - contentGroup
+	*   - rightAdditions
+	*     - titleIconDisplay
+	*   - centerAdditions
+	*     - titleDisplay
+	*   - leftAdditions
+	-->
+	
+	<!--- The border skin. -->
+	<tx:ComponentBorder id="borderDisplay"
+						currentState="{currentState}"
+						top="0" right="0" left="0" bottom="0"/>
+	
+	<!-- Content Container [rightAdditions, centerAdditions, leftAdditions] -->
+	<s:Group id="contentGroup" 
+			 top="{getStyle('paddingTop')}" 
+			 right="{getStyle('paddingRight')}" 
+			 bottom="{getStyle('paddingBottom')}" 
+			 left="{getStyle('paddingLeft')}">
+		
+		<s:layout.horizontal>
+			<s:HorizontalLayout verticalAlign="{getStyle('verticalAlign')}"
+								horizontalAlign="{getStyle('horizontalAlign')}"
+								gap="{getStyle('gap')}"/>
+		</s:layout.horizontal>
+		
+		<s:layout.vertical>
+			<s:VerticalLayout verticalAlign="{getStyle('verticalAlign')}"
+							  horizontalAlign="{getStyle('horizontalAlign')}"
+							  gap="{getStyle('gap')}"/>
+		</s:layout.vertical>		
+		
+		<!--- The left additions container. -->
+		<s:Group id="leftAdditionsGroup" minWidth="0">
+			
+			<!--- The <code>statusIcon</code> display image. -->
+			<s:BitmapImage id="iconDisplay"/>
+			
+		</s:Group>
+		
+		<!--- The main content. -->
+		<s:Group id="centerAdditionsGroup" width="100%">
+			
+			<s:layout.horizontal>
+				<s:HorizontalLayout/>
+			</s:layout.horizontal>
+			
+			<s:layout.vertical>
+				<s:VerticalLayout/>
+			</s:layout.vertical>			
+			
+			<!--- The <code>status</code> display string. -->
+			<s:Label id="labelDisplay" 
+					 minWidth="10"
+					 rotation.vertical="-90"
+					 maxDisplayedLines="1"
+					 width="100%"/>	
+			
+		</s:Group>
+		
+		<!--- The right additions container. -->
+		<s:Group id="rightAdditionsGroup">
+			
+			<s:layout.horizontal>
+				<s:HorizontalLayout gap="{getStyle('buttonGap')}"/>
+			</s:layout.horizontal>
+			
+			<s:layout.vertical>
+				<s:VerticalLayout gap="{getStyle('buttonGap')}"/>
+			</s:layout.vertical>	
+			
+		</s:Group>
+		
+	</s:Group>
+	
+</s:Skin>
