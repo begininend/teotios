@@ -6,6 +6,7 @@
 	<component id="Button" class="org.teotigraphix.ui.components.Button"/>
 	<component id="ComponentBorder" class="org.teotigraphix.ui.components.ComponentBorder"/>
 	<component id="DataControl" class="org.teotigraphix.ui.components.DataControl"/>
+	<component id="StatusBar" class="org.teotigraphix.ui.components.StatusBar"/>
 	<component id="TitleBar" class="org.teotigraphix.ui.components.TitleBar"/>
 	<component id="TitleContainer" class="org.teotigraphix.ui.components.TitleContainer"/>
 	
