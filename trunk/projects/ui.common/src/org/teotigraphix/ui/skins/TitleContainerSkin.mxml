@@ -28,6 +28,7 @@
 		xmlns:s="library://ns.adobe.com/flex/spark" 
 		xmlns:mx="library://ns.adobe.com/flex/halo" 
 		xmlns:tx="http://tx.teotigraphix.org/flex4"
+		xmlns:containerSupport="org.teotigraphix.ui.skins.containerSupport.*"
 		alpha.disabled="0.5" minWidth="131" minHeight="127">
 	
 	<fx:Metadata>
@@ -42,6 +43,7 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import org.teotigraphix.ui.skins.containerSupport.TitleContainerBorderSkin;
 			
 			/**
 			 * @private
@@ -50,22 +52,27 @@
 														  unscaledHeight:Number):void
 			{
 				super.updateDisplayList(unscaledWidth, unscaledHeight);
+				
+				borderDisplay.skin.invalidateDisplayList();
 			}
 			
 		]]>
 	</fx:Script>
 	
-	<tx:ComponentBorder id="border"
-						skinClass="org.teotigraphix.ui.skins.ComponentBorderSkin"/>
+	<!-- Custom layout for multi titleBar placement -->
+	<s:layout>
+		<containerSupport:TitleContainerSkinLayout/>
+	</s:layout>
 	
-	<s:VGroup horizontalAlign="contentJustify"
-			  top="1" right="1" left="1" bottom="1"
-			  gap="0" minWidth="0">
-		
-		<tx:TitleBar id="titleBarDisplay" minWidth="0"/>
-		
-		<s:Group id="contentGroup" height="100%"/>
-		
-	</s:VGroup>
+	<!-- -->
+	<tx:ComponentBorder id="borderDisplay"
+						currentState="{currentState}"
+						skinClass="org.teotigraphix.ui.skins.containerSupport.TitleContainerBorderSkin"/>
+	
+	<tx:TitleBar id="titleBarDisplay" 
+				 skinClass="org.teotigraphix.ui.skins.TitleBarSkin"
+				 minWidth="0"/>
+	
+	<s:Group id="contentGroup"/>
 	
 </s:Skin>

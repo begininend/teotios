@@ -146,18 +146,11 @@ public class TitleBar extends TitleBarBase
 				this.barHighlightColors = [0xFFFFFF, 0xCCCCCC];
 				this.barHighlightAlphas = [1, 1];
 				
-				this.gap = 1;
-				this.verticalAlign = "middle";
+				this.gap = 5;
+				this.buttonGap = 0;
+				this.verticalAlign = "bottom";
 				this.horizontalAlign = "left";
 			});
-		
-		// #borderDisplay defaults
-		//StyleUtil.factory(
-		//	"org.teotigraphix.ui.components.TitleBar",
-		//	"borderDisplay",
-		//	function ():void {
-		//		this.skinClass = BarBorderSkin;
-		//	});
 	}
 	
 	//--------------------------------------------------------------------------

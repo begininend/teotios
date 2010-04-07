@@ -69,7 +69,7 @@ public interface ITitleContainer
 	 * this property will return it's <code>statusBarDisplay</code> skin
 	 * part.</p>
 	 */
-//	function get statusBar():IStatusBar;
+	//	function get statusBar():IStatusBar;
 	
 	/**
 	 * @private
@@ -111,12 +111,12 @@ public interface ITitleContainer
 	 * container will shrink and the content area will remain the 
 	 * same size.</p>
 	 */
-//	function get showStatusBar():Boolean;
+	//	function get showStatusBar():Boolean;
 	
 	/**
 	 * @private
 	 */
-//	function set showStatusBar(value:Boolean):void;
+	//	function set showStatusBar(value:Boolean):void;
 	
 	//----------------------------------
 	//  showContentGroup

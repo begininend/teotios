@@ -19,9 +19,38 @@
 
 package org.teotigraphix.ui.components
 {
+
+import mx.styles.IStyleClient;
+
 import org.teotigraphix.ui.components.containerSupport.TitleContainerBase;
 import org.teotigraphix.ui.skins.TitleContainerSkin;
 import org.teotigraphix.ui.utils.StyleUtil;
+
+//--------------------------------------
+//  Styles
+//--------------------------------------
+
+/**
+ * The alternate <code>skinClass</code> for the <code>borderDisplay</code>.
+ * 
+ * @mxml Class
+ * @default undefined
+ */
+[Style(name="borderSkinClass",type="Class")]
+
+/**
+ * The alternate <code>skinClass</code> for the <code>titleBarDisplay</code>.
+ * 
+ * @mxml Class
+ * @default undefined
+ */
+[Style(name="titleBarSkinClass",type="Class")]
+
+[Style(name="offsetTitleBar",type="Boolean")]
+
+//--------------------------------------
+//  Styles
+//--------------------------------------
 
 /**
  * The TitleContainer class is a style-skin implementation fo the 
@@ -47,46 +76,28 @@ public class TitleContainer extends TitleContainerBase
 	
 	/**
 	 * Initializes the TypeSelector for the 
-	 * <code>org.teotigraphix.ui.components.TitleBar</code>.
+	 * <code>com.teotigraphix.ui.components.TitleBar</code>.
 	 */
 	public static function initializeClass():void
 	{
 		if (stylesInitialized)
 			return;
+		else
+			stylesInitialized = true;
 		
 		StyleUtil.create(
 			"org.teotigraphix.ui.components.TitleContainer",
 			function ():void {
-				
 				this.skinClass = TitleContainerSkin;
 				
-				/*
-				this.borderColor = 0xFFFFFF;
-				this.borderAlpha = 1;
-				
-				this.backgroundColor = 0xFFFFFF;
-				this.backgroundAlpha = 1;
-				
-				this.headerColors = undefined;
-				this.headerAlphas = undefined;
-				
-				this.gap = 2;
-				
-				this.paddingTop = 2;
-				this.paddingRight = 2;
-				this.paddingBottom = 2;
-				this.paddingLeft = 2;
-				
+				this.borderVisible = true;
+				this.borderAlpha = 0.5;
+				this.borderColor = 0x000000;
 				this.cornerRadius = 0;
+				this.dropShadowVisible = true;
 				
-				this.topLeftRadius = 0;
-				this.topRightRadius = 0;
-				this.bottomRightRadius = 0;
-				this.bottomLeftRadius = 0;
-				*/
+				this.offsetTitleBar = true;
 			});
-		
-		stylesInitialized = true;
 	}
 	
 	//--------------------------------------------------------------------------
@@ -103,6 +114,56 @@ public class TitleContainer extends TitleContainerBase
 		super();
 		
 		initializeClass();
+	}
+	
+	//--------------------------------------------------------------------------
+	//
+	//  Overridden Protected :: Methods
+	//
+	//--------------------------------------------------------------------------
+	
+	/**
+	 * @private
+	 */
+	override protected function partAdded(partName:String, instance:Object):void
+	{
+		super.partAdded(partName, instance);
+		
+		if (instance == borderDisplay)
+		{
+			StyleUtil.setSkinClass(this, borderDisplay as IStyleClient);
+		}
+		
+		if (instance == titleBarDisplay)
+		{
+			StyleUtil.setSkinClass(this, titleBarDisplay);
+		}
+	}
+	
+	//--------------------------------------------------------------------------
+	//
+	//  Overridden Public :: Methods
+	//
+	//--------------------------------------------------------------------------
+	
+	/**
+	 * @private
+	 */
+	public override function styleChanged(styleProp:String):void
+	{
+		super.styleChanged(styleProp);
+		
+		var allStyles:Boolean = styleProp == null || styleProp == "styleName";
+		
+		if (allStyles || styleProp == "borderSkinClass")
+		{
+			StyleUtil.setSkinClass(this, borderDisplay as IStyleClient);
+		}		
+		
+		if (allStyles || styleProp == "titleBarSkinClass")
+		{
+			StyleUtil.setSkinClass(this, titleBarDisplay);
+		}
 	}
 }
 }
