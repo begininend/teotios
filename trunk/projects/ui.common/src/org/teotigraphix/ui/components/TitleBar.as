@@ -23,8 +23,14 @@ package org.teotigraphix.ui.components
 import flash.events.IEventDispatcher;
 import flash.events.MouseEvent;
 
+import mx.styles.IStyleClient;
+
 import org.teotigraphix.ui.components.controlSupport.TitleBarBase;
 import org.teotigraphix.ui.skins.TitleBarSkin;
+import org.teotigraphix.ui.skins.controlSupport.BarBorderSkin;
+import org.teotigraphix.ui.skins.controlSupport.CloseButtonSkin;
+import org.teotigraphix.ui.skins.controlSupport.MaximizeButtonSkin;
+import org.teotigraphix.ui.skins.controlSupport.MinimizeButtonSkin;
 import org.teotigraphix.ui.utils.StyleUtil;
 
 import spark.components.supportClasses.ButtonBase;
@@ -37,23 +43,52 @@ import spark.primitives.BitmapImage;
 //--------------------------------------
 
 /**
- * Name of the skin class to use for this component.
- * 
- * <p>The skin must be a class that extends the 
- * spark.components.supportClasses.Skin class.</p>
+ * The alternate <code>skinClass</code> for the <code>borderDisplay</code>.
  * 
  * @mxml Class
- * @default org.teotigraphix.ui.skins.TitleBarSkin
+ * @default undefined
  */
-//[Style(name="skinClass",type="Class")]
+[Style(name="borderSkinClass",type="Class")]
 
 /**
- * The TitleBar class is a style-skin implementation fo the 
+ * The alternate <code>skinClass</code> for the 
+ * <code>minimizeButtonDisplay</code>.
+ * 
+ * @mxml Class
+ * @default undefined
+ */
+[Style(name="minimizeButtonSkinClass",type="Class")]
+
+/**
+ * The alternate <code>skinClass</code> for the 
+ * <code>maximizeButtonDisplay</code>.
+ * 
+ * @mxml Class
+ * @default undefined
+ */
+[Style(name="maximizeButtonSkinClass",type="Class")]
+
+/**
+ * The alternate <code>skinClass</code> for the 
+ * <code>closeButtonDisplay</code>.
+ * 
+ * @mxml Class
+ * @default undefined
+ */
+[Style(name="closeButtonSkinClass",type="Class")]
+
+//--------------------------------------
+//  Class
+//--------------------------------------
+
+/**
+ * The TitleBar class is a style-skin implementation for the 
  * <code>TitleBarBase</code> class.
  * 
  * @author Michael Schmalle
  * @copyright Teoti Graphix, LLC
  * @productversion 1.0
+ * 
  * @mxml
  */
 public class TitleBar extends TitleBarBase
@@ -77,23 +112,20 @@ public class TitleBar extends TitleBarBase
 	{
 		if (stylesInitialized)
 			return;
+		else
+			stylesInitialized = true;
 		
 		StyleUtil.create(
 			"org.teotigraphix.ui.components.TitleBar",
 			function ():void {
-				
 				this.skinClass = TitleBarSkin;
 				
+				// ControlBase
 				this.borderColor = 0xFFFFFF;
 				this.borderAlpha = 1;
 				
 				this.backgroundColor = 0xFFFFFF;
 				this.backgroundAlpha = 1;
-				
-				this.headerColors = undefined;
-				this.headerAlphas = undefined;
-				
-				this.gap = 1;
 				
 				this.paddingTop = 2;
 				this.paddingRight = 2;
@@ -106,9 +138,26 @@ public class TitleBar extends TitleBarBase
 				this.topRightRadius = 0;
 				this.bottomRightRadius = 0;
 				this.bottomLeftRadius = 0;
+				
+				// BarBase
+				this.barColors = [0xE2E2E2, 0xD9D9D9];
+				this.barAlphas = [1, 1];
+				this.barDividerColor = 0x242424;//0xC0C0C0;
+				this.barHighlightColors = [0xFFFFFF, 0xCCCCCC];
+				this.barHighlightAlphas = [1, 1];
+				
+				this.gap = 1;
+				this.verticalAlign = "middle";
+				this.horizontalAlign = "left";
 			});
 		
-		stylesInitialized = true;
+		// #borderDisplay defaults
+		//StyleUtil.factory(
+		//	"org.teotigraphix.ui.components.TitleBar",
+		//	"borderDisplay",
+		//	function ():void {
+		//		this.skinClass = BarBorderSkin;
+		//	});
 	}
 	
 	//--------------------------------------------------------------------------
@@ -125,6 +174,76 @@ public class TitleBar extends TitleBarBase
 		super();
 		
 		initializeClass();
+	}
+	
+	//--------------------------------------------------------------------------
+	//
+	//  Overridden Protected :: Methods
+	//
+	//--------------------------------------------------------------------------
+	
+	/**
+	 * @private
+	 */
+	override protected function partAdded(partName:String, instance:Object):void
+	{
+		super.partAdded(partName, instance);
+		
+		if (instance == borderDisplay)
+		{
+			StyleUtil.setSkinClass(this, borderDisplay as IStyleClient);
+		}
+		
+		if (instance == minimizeButtonDisplay)
+		{
+			StyleUtil.setSkinClass(this, minimizeButtonDisplay);
+		}
+		
+		if (instance == maximizeButtonDisplay)
+		{
+			StyleUtil.setSkinClass(this, maximizeButtonDisplay);
+		}
+		
+		if (instance == closeButtonDisplay)
+		{
+			StyleUtil.setSkinClass(this, closeButtonDisplay);
+		}
+	}
+	
+	//--------------------------------------------------------------------------
+	//
+	//  Overridden Public :: Methods
+	//
+	//--------------------------------------------------------------------------
+	
+	/**
+	 * @private
+	 */
+	public override function styleChanged(styleProp:String):void
+	{
+		super.styleChanged(styleProp);
+		
+		var allStyles:Boolean = styleProp == null || styleProp == "styleName";
+		
+		if (allStyles || styleProp == "borderSkinClass")
+		{
+			StyleUtil.setSkinClass(this, borderDisplay as IStyleClient);
+		}
+		
+		if (allStyles || styleProp == "minimizeButtonSkinClass")
+		{
+			StyleUtil.setSkinClass(this, minimizeButtonDisplay);
+		}
+		
+		if (allStyles || styleProp == "minimizeButtonSkinClass")
+		{
+			StyleUtil.setSkinClass(this, maximizeButtonDisplay);
+		}
+		
+		if (allStyles || styleProp == "closeButtonSkinClass")
+		{
+			StyleUtil.setSkinClass(this, closeButtonDisplay);
+		}		
 	}
 }
 }

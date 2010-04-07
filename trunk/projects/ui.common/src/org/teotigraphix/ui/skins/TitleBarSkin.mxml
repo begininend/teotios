@@ -18,97 +18,135 @@
 // mschmalle at teotigraphix dot com
 -->
 <!--- 
- The default <code>skinClass</code> for the <code>TitleBar</code>.
-
- @author Michael Schmalle
- @copyright Teoti Graphix, LLC
- @productversion 1.0
+* The default <code>skinClass</code> for the <code>TitleBar</code>.
+* 
+* <ul>
+* <li>borderDisplay - skinnable border background</li>
+* <li>titleDisplay - title pushed into text property</li>
+* <li>titleIconDisplay - titleIcon pushed into source property</li>
+* <li>minimizeButtonDisplay - </li>
+* <li>maximizeButtonDisplay - </li>
+* <li>closeButtonDisplay - </li>
+* </ul>
+* 
+* @author Michael Schmalle
+* @copyright Teoti Graphix, LLC
+* @productversion 1.0
 -->
 <s:Skin xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		xmlns:s="library://ns.adobe.com/flex/spark" 
-		xmlns:mx="library://ns.adobe.com/flex/halo"
-		alpha.disabled="0.5">
+		xmlns:mx="library://ns.adobe.com/flex/mx"
+		xmlns:tx="http://tx.teotigraphix.org/flex4">
 	
 	<fx:Metadata>
-		
 		[HostComponent("org.teotigraphix.ui.components.TitleBar")]
-		
 	</fx:Metadata>
 	
+	<!-- states -->
 	<s:states>
-		<s:State name="normal"/>
-		<s:State name="right"/>
-		<s:State name="bottom"/>
-		<s:State name="left"/>
+		<s:State name="normal" stateGroups="horizontal"/>
+		<s:State name="bottom" stateGroups="horizontal"/>
+		<s:State name="right" stateGroups="vertical"/>
+		<s:State name="left" stateGroups="vertical"/>
 		<s:State name="disabled"/>
 	</s:states>
-
-	<fx:Script>
-		<![CDATA[
-			import org.teotigraphix.ui.api.ITitleContainer;
-			
-			/**
-			 * @private
-			 */
-			override protected function updateDisplayList(unscaledWidth:Number, 
-														  unscaledHeight:Number):void
-			{
-				super.updateDisplayList(unscaledWidth, unscaledHeight);
-			}
-
-		]]>
-	</fx:Script>
 	
 	<!--
-	<s:Rect top="0" right="0" left="0" bottom="0">
-		<s:fill>
-			<s:SolidColor color="#CCCCCC"/>
-		</s:fill>
-	</s:Rect>
+	* - borderDisplay
+	* - contentGroup
+	*   - rightAdditions
+	*     - titleIconDisplay
+	*   - centerAdditions
+	*     - titleDisplay
+	*   - leftAdditions
+	*     - minimizeButtonDisplay
+	*     - maximizeButtonDisplay
+	*     - closeButtonDisplay
 	-->
 	
-	<s:HGroup width="100%" 
-			  verticalAlign="middle"
-			  paddingTop="{getStyle('paddingTop')}"
-			  paddingRight="{getStyle('paddingRight')}"
-			  paddingBottom="{getStyle('paddingBottom')}"
-			  paddingLeft="{getStyle('paddingLeft')}">
+	<!--- The border skin. -->
+	<tx:ComponentBorder id="borderDisplay"
+						currentState="{currentState}"
+						skinClass="org.teotigraphix.ui.skins.controlSupport.BarBorderSkin"
+						top="0" right="0" left="0" bottom="0"/>
+	
+	<!-- Content Container [rightAdditions, centerAdditions, leftAdditions] -->
+	<s:Group id="contentGroup" 
+			 top="{getStyle('paddingTop')}" 
+			 right="{getStyle('paddingRight')}" 
+			 bottom="{getStyle('paddingBottom')}" 
+			 left="{getStyle('paddingLeft')}">
 		
-		<s:HGroup width="100%" 
-				  gap="{getStyle('gap')}"
-				  verticalAlign="bottom">
+		<s:layout.horizontal>
+			<s:HorizontalLayout verticalAlign="middle"
+								horizontalAlign="left"
+								gap="{getStyle('gap')}"/>
+		</s:layout.horizontal>
+		
+		<s:layout.vertical>
+			<!-- swap v & h, this might change -->
+			<s:VerticalLayout verticalAlign="top"
+							  horizontalAlign="center"
+							  gap="{getStyle('gap')}"/>
+		</s:layout.vertical>
+		
+		<!--- The right additions container. -->
+		<s:Group id="rightAdditions" minWidth="0">
 			
 			<!--- The <code>titleIcon</code> display image. -->
-			<s:BitmapImage id="titleIconDisplay"/>
+			<s:BitmapImage id="iconDisplay"/>
+			
+		</s:Group>
+		
+		<!--- The main content. -->
+		<s:Group id="centerAdditions" width="100%" height.vertical="100%">
+			
+			<s:layout.horizontal>
+				<s:HorizontalLayout/>
+			</s:layout.horizontal>
+			
+			<s:layout.vertical>
+				<s:VerticalLayout horizontalAlign="center"/>
+			</s:layout.vertical>
 			
 			<!--- The <code>title</code> display string. -->
-			<s:Label id="titleDisplay" 
-					 text="Title text"
+			<s:Label id="labelDisplay" 
 					 fontWeight="bold"
 					 minWidth="10"
-					 width="100%"/>
+					 maxDisplayedLines="1"
+					 width="100%"
+					 width.vertical="1"
+					 textAlign.vertical="right"
+					 rotation.vertical="-90"
+					 height.vertical="100%"/>	
 			
-		</s:HGroup>
+		</s:Group>
 		
-		<s:HGroup gap="{getStyle('gap')}">
+		<!--- The left additions container. -->
+		<s:Group id="leftAdditions">
+			
+			<s:layout.horizontal>
+				<s:HorizontalLayout gap="{getStyle('buttonGap')}"/>
+			</s:layout.horizontal>
+			
+			<s:layout.vertical>
+				<s:VerticalLayout gap="{getStyle('buttonGap')}"/>
+			</s:layout.vertical>			
 			
 			<!--- The <code>minimizeButton</code> display button. -->
-			<s:ToggleButton id="minimizeButtonDisplay" 
-							skinClass="org.teotigraphix.ui.skins.controlSupport.MinimizeButtonSkin"
-							width="13" height="13"/>
+			<s:ToggleButton id="minimizeButtonDisplay"
+							skinClass="org.teotigraphix.ui.skins.controlSupport.MinimizeButtonSkin"/>
 			
 			<!--- The <code>maximizeButton</code> display button. -->
-			<s:ToggleButton id="maximizeButtonDisplay" 
-							skinClass="org.teotigraphix.ui.skins.controlSupport.MaximizeButtonSkin"
-							width="13" height="13"/>
+			<s:ToggleButton id="maximizeButtonDisplay"
+							skinClass="org.teotigraphix.ui.skins.controlSupport.MaximizeButtonSkin"/>
 			
 			<!--- The <code>closeButton</code> display button. -->
-			<s:Button id="closeButtonDisplay" 
-					  skinClass="org.teotigraphix.ui.skins.controlSupport.CloseButtonSkin"
-					  width="13" height="13"/>
+			<s:Button id="closeButtonDisplay"
+					  skinClass="org.teotigraphix.ui.skins.controlSupport.CloseButtonSkin"/>			
 			
-		</s:HGroup>
+		</s:Group>
 		
-	</s:HGroup>
+	</s:Group>
 	
 </s:Skin>
