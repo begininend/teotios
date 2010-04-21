@@ -20,7 +20,7 @@
 package org.teotigraphix.ui.components
 {
 
-// TODO Make the ToggleButton, anyway to share the logic?
+// TODO (mschmalle) Make the ToggleButton, anyway to share the logic?
 
 import mx.core.IVisualElement;
 

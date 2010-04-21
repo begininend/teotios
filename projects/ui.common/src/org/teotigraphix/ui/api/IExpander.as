@@ -21,6 +21,9 @@ package org.teotigraphix.ui.api
 {
 
 /**
+ * The IExpander interface creates a contract with a component that can expand
+ * collpase it's ui based on the <code>opened</code> property.
+ * 
  * @author Michael Schmalle
  * @copyright Teoti Graphix, LLC
  * @productversion 1.0
@@ -38,7 +41,7 @@ public interface IExpander
 	//----------------------------------
 	
 	/**
-	 * TODO DOCME
+	 * Whether the expandable component is open or closed.
 	 */
 	function get opened():Boolean;
 	

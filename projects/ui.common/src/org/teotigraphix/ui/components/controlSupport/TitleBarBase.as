@@ -34,6 +34,15 @@ import spark.components.supportClasses.ToggleButtonBase;
 import spark.primitives.BitmapImage;
 
 //--------------------------------------
+//  Events
+//--------------------------------------
+
+/**
+ * @eventType org.teotigraphix.ui.events.TitleBarEvent#BUTTON_CLICK
+ */
+[Event(name="buttonClick",type="org.teotigraphix.ui.events.TitleBarEvent")]
+
+//--------------------------------------
 //  Styles
 //--------------------------------------
 
@@ -43,15 +52,6 @@ import spark.primitives.BitmapImage;
  * @mxml 1
  */
 [Style(name="buttonGap",type="int",format="Length")]
-
-//--------------------------------------
-//  Events
-//--------------------------------------
-
-/**
- * @eventType org.teotigraphix.ui.events.TitleBarEvent#BUTTON_CLICK
- */
-[Event(name="buttonClick",type="org.teotigraphix.ui.events.TitleBarEvent")]
 
 //--------------------------------------
 //  Class
@@ -298,17 +298,17 @@ public class TitleBarBase extends MessageBarBase implements ITitleBar
 		
 		if (instance == minimizeButtonDisplay)
 		{
-			addButtonClickHandlers(minimizeButtonDisplay);
+			addOrRemoveButtonClickHandlers(minimizeButtonDisplay, true);
 			setButtonVisibility(minimizeButtonDisplay, _showMinimizeButton);
 		}
 		else if (instance == maximizeButtonDisplay)
 		{
-			addButtonClickHandlers(maximizeButtonDisplay);
+			addOrRemoveButtonClickHandlers(maximizeButtonDisplay, true);
 			setButtonVisibility(maximizeButtonDisplay, _showMaximizeButton);
 		}
 		else if (instance == closeButtonDisplay)
 		{
-			addButtonClickHandlers(closeButtonDisplay);
+			addOrRemoveButtonClickHandlers(closeButtonDisplay, true);
 			setButtonVisibility(closeButtonDisplay, _showCloseButton);
 		}
 	}
@@ -322,15 +322,15 @@ public class TitleBarBase extends MessageBarBase implements ITitleBar
 		
 		if (instance == minimizeButtonDisplay)
 		{
-			removeButtonClickHandlers(minimizeButtonDisplay);
+			addOrRemoveButtonClickHandlers(minimizeButtonDisplay, false);
 		}
 		else if (instance == maximizeButtonDisplay)
 		{
-			removeButtonClickHandlers(maximizeButtonDisplay);
+			addOrRemoveButtonClickHandlers(maximizeButtonDisplay, false);
 		}
 		else if (instance == closeButtonDisplay)
 		{
-			removeButtonClickHandlers(closeButtonDisplay);
+			addOrRemoveButtonClickHandlers(closeButtonDisplay, false);
 		}
 	}
 	
@@ -366,24 +366,24 @@ public class TitleBarBase extends MessageBarBase implements ITitleBar
 	//
 	//--------------------------------------------------------------------------
 	
-	/**
-	 * Add <code>MouseEvent</code> handlers to a button.
-	 * 
-	 * @param button An <code>IEventDispatcher</code> button.
-	 */
-	protected function addButtonClickHandlers(button:IEventDispatcher):void
-	{
-		button.addEventListener(MouseEvent.CLICK, button_clickHandler);
-	}
 	
 	/**
-	 * Remove <code>MouseEvent</code> handlers from a button.
+	 * Add or removes <code>MouseEvent</code> handlers to or from a button.
 	 * 
 	 * @param button An <code>IEventDispatcher</code> button.
+	 * @param add A Boolean indicating whether to add or remove the handlers.
 	 */
-	protected function removeButtonClickHandlers(button:IEventDispatcher):void
+	protected function addOrRemoveButtonClickHandlers(button:IEventDispatcher,
+													  add:Boolean):void
 	{
-		button.removeEventListener(MouseEvent.CLICK, button_clickHandler);
+		if (add)
+		{
+			button.addEventListener(MouseEvent.CLICK, button_clickHandler);
+		}
+		else
+		{
+			button.removeEventListener(MouseEvent.CLICK, button_clickHandler);
+		}
 	}
 	
 	//--------------------------------------------------------------------------
@@ -408,6 +408,7 @@ public class TitleBarBase extends MessageBarBase implements ITitleBar
 			selected = ToggleButtonBase(button).selected;
 		}
 		
+		// TODO (mschmalle) make BUTTON_CLICK cancelable
 		var e:TitleBarEvent = new TitleBarEvent(
 			TitleBarEvent.BUTTON_CLICK, false, false, 
 			button, selected);

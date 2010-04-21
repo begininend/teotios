@@ -97,7 +97,7 @@ public class ButtonLayout extends LayoutBase
 		layoutTarget.measuredMinHeight = mHeight;		
 	}
 	
-	// XXX implement Button.labelPlacement
+	// XXX (mschmalle) implement Button.labelPlacement
 	
 	/**
 	 * @private

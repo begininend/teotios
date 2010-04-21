@@ -57,6 +57,20 @@ import spark.components.supportClasses.Skin;
 [Style(name="barDividerColor",type="uint",format="Color")]
 
 /**
+ * The bar highlight alphas.
+ * 
+ * @mxml
+ */
+[Style(name="barHighlightAlphas",type="Array",arrayType="Number")]
+
+/**
+ * The bar highlight colors.
+ * 
+ * @mxml
+ */
+[Style(name="barHighlightColors",type="Array",arrayType="uint")]
+
+/**
  * The layout gap of the contentGroup.
  * 
  * @mxml 2
@@ -126,7 +140,7 @@ public class BarBase extends ComponentBase implements IBar
 	/**
 	 * Content for the <code>left</code> or <code>top</code> of the bar.
 	 */
-	public var leftAdditionsGroup:Group;
+	public var leftAdditionsDisplay:Group;
 	
 	//----------------------------------
 	//  contentDisplay
@@ -137,7 +151,7 @@ public class BarBase extends ComponentBase implements IBar
 	/**
 	 * Content for the <code>center</code> of the bar.
 	 */
-	public var centerAdditionsGroup:Group;
+	public var centerAdditionsDisplay:Group;
 	
 	//----------------------------------
 	//  rightAdditions
@@ -148,7 +162,7 @@ public class BarBase extends ComponentBase implements IBar
 	/**
 	 * Content for the <code>right</code> or <code>bottom</code> of the bar.
 	 */
-	public var rightAdditionsGroup:Group;
+	public var rightAdditionsDisplay:Group;
 	
 	//--------------------------------------------------------------------------
 	//
@@ -168,7 +182,7 @@ public class BarBase extends ComponentBase implements IBar
 	private var _placement:String;
 	
 	/**
-	 * @copy org.teotigraphix.ui.api.IBar#placement
+	 * @copy org.teotigraphix.ui.api.control.IBar#placement
 	 * 
 	 * @default top
 	 * @mxml top|right|bottom|left
@@ -229,6 +243,7 @@ public class BarBase extends ComponentBase implements IBar
 	public function set leftAdditions(value:Array):void
 	{
 		_leftAdditions = value;
+		// TODO (mschmalle) remove and add addition content
 	}
 	
 	//----------------------------------
@@ -257,6 +272,7 @@ public class BarBase extends ComponentBase implements IBar
 	public function set rightAdditions(value:Array):void
 	{
 		_rightAdditions = value;
+		// TODO (mschmalle) remove and add addition content
 	}
 	
 	//--------------------------------------------------------------------------
@@ -338,13 +354,13 @@ public class BarBase extends ComponentBase implements IBar
 	{
 		if (position == "left")
 		{
-			leftAdditionsGroup.includeInLayout = true;
-			leftAdditionsGroup.addElement(instance);
+			leftAdditionsDisplay.includeInLayout = true;
+			leftAdditionsDisplay.addElement(instance);
 		}
 		else if (position == "right")
 		{
-			rightAdditionsGroup.includeInLayout = true;
-			rightAdditionsGroup.addElement(instance);
+			rightAdditionsDisplay.includeInLayout = true;
+			rightAdditionsDisplay.addElement(instance);
 		}
 	}
 	
@@ -353,6 +369,7 @@ public class BarBase extends ComponentBase implements IBar
 	 */
 	public function removeAddition(instance:IVisualElement):void
 	{
+		// TODO (mschmalle) implement removeAddition()
 	}
 	
 	//--------------------------------------------------------------------------

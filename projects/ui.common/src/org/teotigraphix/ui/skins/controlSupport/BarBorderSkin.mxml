@@ -50,7 +50,7 @@
 			import org.teotigraphix.ui.components.containerSupport.TitleContainerBase;
 			import org.teotigraphix.ui.core.BarPlacement;
 			
-			// XXX make a base class for this Skin
+			// XXX (mschmalle) make a base class for this Skin
 			
 			private function getContainer():TitleContainerBase
 			{
