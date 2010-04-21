@@ -54,11 +54,11 @@
 	<!--
 	* - borderDisplay
 	* - contentGroup
-	*   - rightAdditions
+	*   - leftAdditions
 	*     - titleIconDisplay
 	*   - centerAdditions
 	*     - titleDisplay
-	*   - leftAdditions
+	*   - rightAdditions
 	*     - minimizeButtonDisplay
 	*     - maximizeButtonDisplay
 	*     - closeButtonDisplay
@@ -70,8 +70,8 @@
 						skinClass="org.teotigraphix.ui.skins.controlSupport.BarBorderSkin"
 						top="0" right="0" left="0" bottom="0"/>
 	
-	<!-- Content Container [rightAdditions, centerAdditions, leftAdditions] -->
-	<s:Group id="contentGroup" 
+	<!-- Content Container -->
+	<s:Group id="contentDisplay" 
 			 top="{getStyle('paddingTop')}" 
 			 right="{getStyle('paddingRight')}" 
 			 bottom="{getStyle('paddingBottom')}" 
@@ -90,8 +90,8 @@
 							  gap="{getStyle('gap')}"/>
 		</s:layout.vertical>
 		
-		<!--- The right additions container. -->
-		<s:Group id="rightAdditions" minWidth="0">
+		<!--- The left additions container. -->
+		<s:Group id="leftAdditionsDisplay" minWidth="0">
 			
 			<!--- The <code>titleIcon</code> display image. -->
 			<s:BitmapImage id="iconDisplay"/>
@@ -99,7 +99,8 @@
 		</s:Group>
 		
 		<!--- The main content. -->
-		<s:Group id="centerAdditions" width="100%" height.vertical="100%">
+		<s:Group id="centerAdditionsDisplay" 
+				 width="100%" height.vertical="100%">
 			
 			<s:layout.horizontal>
 				<s:HorizontalLayout/>
@@ -119,8 +120,8 @@
 			
 		</s:Group>
 		
-		<!--- The left additions container. -->
-		<s:Group id="leftAdditions">
+		<!--- The right additions container. -->
+		<s:Group id="rightAdditionsDisplay">
 			
 			<s:layout.horizontal>
 				<s:HorizontalLayout gap="{getStyle('buttonGap')}"/>

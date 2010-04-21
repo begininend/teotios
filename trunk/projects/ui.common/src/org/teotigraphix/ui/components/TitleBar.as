@@ -120,7 +120,7 @@ public class TitleBar extends TitleBarBase
 			function ():void {
 				this.skinClass = TitleBarSkin;
 				
-				// ControlBase
+				// ComponentBase
 				this.borderColor = 0xFFFFFF;
 				this.borderAlpha = 1;
 				
@@ -147,9 +147,11 @@ public class TitleBar extends TitleBarBase
 				this.barHighlightAlphas = [1, 1];
 				
 				this.gap = 5;
-				this.buttonGap = 0;
 				this.verticalAlign = "bottom";
 				this.horizontalAlign = "left";
+				
+				// TitleBarBase
+				this.buttonGap = 0;
 			});
 	}
 	

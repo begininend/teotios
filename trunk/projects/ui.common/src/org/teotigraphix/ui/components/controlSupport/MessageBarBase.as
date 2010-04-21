@@ -87,7 +87,7 @@ public class MessageBarBase extends BarBase
 	 * @private
 	 */
 	private var _icon:Class;
-	
+	// TODO (mschmalle) add Inspectable
 	/**
 	 * The message icon.
 	 * 
@@ -120,7 +120,7 @@ public class MessageBarBase extends BarBase
 	 * @private
 	 */
 	private var _label:String;
-	
+	// TODO (mschmalle) add Inspectable
 	/**
 	 * The message label.
 	 * 
