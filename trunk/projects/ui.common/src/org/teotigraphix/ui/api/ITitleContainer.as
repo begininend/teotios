@@ -45,7 +45,7 @@ public interface ITitleContainer
 	//----------------------------------
 	
 	/**
-	 * Returns the title bar instance.
+	 * Returns the <code>titleBarDisplay</code> instance.
 	 * 
 	 * <p>In the default implementation of the <code>TitleContainerBase</code>,
 	 * this property will return it's <code>titleBarDisplay</code> skin
@@ -53,29 +53,19 @@ public interface ITitleContainer
 	 */
 	function get titleBar():ITitleBar;
 	
-	/**
-	 * @private
-	 */
-	//function set titleBar(value:ITitleBar):void;
-	
 	//----------------------------------
 	//  statusBar
 	//----------------------------------
 	
 	/**
-	 * Returns the status bar instance.
+	 * Returns the <code>statusBarDisplay</code> instance.
 	 * 
 	 * <p>In the default implementation of the <code>TitleContainerBase</code>,
 	 * this property will return it's <code>statusBarDisplay</code> skin
 	 * part.</p>
 	 */
-	//	function get statusBar():IStatusBar;
-	
-	/**
-	 * @private
-	 */
-	//function set statusBar(value:IStatusBar):void;
-	
+	function get statusBar():IStatusBar;
+
 	//----------------------------------
 	//  showTitleBar
 	//----------------------------------
@@ -87,9 +77,6 @@ public interface ITitleContainer
 	 * the content will expand to fill the area where the titleBar was located.
 	 * If an explicitHeight has not been set, the container will shrink and
 	 * the content area will remain the same size.</p>
-	 * 
-	 * @mxml true|false
-	 * @default true
 	 */
 	function get showTitleBar():Boolean;
 	
@@ -111,12 +98,12 @@ public interface ITitleContainer
 	 * container will shrink and the content area will remain the 
 	 * same size.</p>
 	 */
-	//	function get showStatusBar():Boolean;
+	function get showStatusBar():Boolean;
 	
 	/**
 	 * @private
 	 */
-	//	function set showStatusBar(value:Boolean):void;
+	function set showStatusBar(value:Boolean):void;
 	
 	//----------------------------------
 	//  showContentGroup
@@ -164,6 +151,5 @@ public interface ITitleContainer
 	//  Methods
 	//
 	//--------------------------------------------------------------------------
-	
 }
 }
