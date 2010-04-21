@@ -22,8 +22,10 @@ package org.teotigraphix.ui.components.containerSupport
 
 import flash.events.IEventDispatcher;
 
+import mx.core.IVisualElement;
 import mx.core.UIComponent;
 
+import org.teotigraphix.ui.api.IStatusBar;
 import org.teotigraphix.ui.api.ITitleBar;
 import org.teotigraphix.ui.api.ITitleContainer;
 import org.teotigraphix.ui.api.control.IBar;
@@ -32,12 +34,6 @@ import org.teotigraphix.ui.events.TitleBarEvent;
 import org.teotigraphix.ui.events.TitleContainerEvent;
 
 import spark.components.supportClasses.ButtonBase;
-
-//--------------------------------------
-//  IconFile
-//--------------------------------------
-
-//[IconFile("TitleContainer.png")]
 
 //--------------------------------------
 //  Events
@@ -88,7 +84,12 @@ public class TitleContainerBase extends ContainerBase
 	/**
 	 * @private
 	 */
-	private var titleBarDisplayChanged:Boolean = false;
+	private var titleBarPropertiesChanged:Boolean = false;
+	
+	/**
+	 * @private
+	 */
+	private var statusBarPropertiesChanged:Boolean = false;
 	
 	/**
 	 * @private
@@ -110,18 +111,18 @@ public class TitleContainerBase extends ContainerBase
 	/**
 	 * The <code>ITitleBar</code> skin part.
 	 */
-	public var titleBarDisplay:UIComponent;
+	public var titleBarDisplay:IVisualElement;
 	
 	//----------------------------------
 	//  statusBarDisplay
 	//----------------------------------
 	
-	//	[SkinPart(required="true")]
+	[SkinPart(required="false")]
 	
 	/**
 	 * The <code>IStatusBar</code> skin part.
 	 */
-	//	public var statusBarDisplay:UIComponent;
+	public var statusBarDisplay:IVisualElement;
 	
 	//--------------------------------------------------------------------------
 	//
@@ -305,6 +306,78 @@ public class TitleContainerBase extends ContainerBase
 	
 	//--------------------------------------------------------------------------
 	//
+	//  IStatusBar API :: Properties
+	//
+	//--------------------------------------------------------------------------
+	
+	//----------------------------------
+	//  statusIcon
+	//----------------------------------
+	
+	[Inspectable(category="General")]
+	
+	/**
+	 * @private
+	 */
+	private var _statusIcon:Class;
+	
+	/**
+	 * @copy org.teotigraphix.ui.api.IStatusBar#statusIcon
+	 * @mxml null
+	 */
+	public function get statusIcon():Class
+	{
+		return _statusIcon;
+	}
+	
+	/**
+	 * @private
+	 */
+	public function set statusIcon(value:Class):void
+	{
+		if (_statusIcon == value)
+			return;
+		
+		_statusIcon = value;
+		
+		invalidateStatusBar();
+	}
+	
+	//----------------------------------
+	//  status
+	//----------------------------------
+	
+	/**
+	 * @private
+	 */
+	private var _status:String;
+	
+	[Inspectable(category="General")]
+	
+	/**
+	 * @copy org.teotigraphix.ui.api.IStatusBar#status
+	 * @mxml
+	 */
+	public function get status():String
+	{
+		return _status;
+	}
+	
+	/**
+	 * @private
+	 */
+	public function set status(value:String):void
+	{
+		if (_status == value)
+			return;
+		
+		_status = value;
+		
+		invalidateStatusBar();
+	}
+	
+	//--------------------------------------------------------------------------
+	//
 	//  ITitleContainer API :: Properties
 	//
 	//--------------------------------------------------------------------------
@@ -328,10 +401,10 @@ public class TitleContainerBase extends ContainerBase
 	/**
 	 * @copy org.teotigraphix.ui.api.ITitleContainer#statusBar
 	 */
-	//	public function get statusBar():IStatusBar
-	//	{
-	//		return statusBarDisplay as IStatusBar;
-	//	}
+	public function get statusBar():IStatusBar
+	{
+		return statusBarDisplay as IStatusBar;
+	}
 	
 	//----------------------------------
 	//  showTitleBar
@@ -482,16 +555,22 @@ public class TitleContainerBase extends ContainerBase
 	{
 		super.commitProperties();
 		
-		if (titleBarDisplayChanged)
+		if (titleBarPropertiesChanged)
 		{
 			commitTitleBarProperties();
-			titleBarDisplayChanged = false;
+			titleBarPropertiesChanged = false;
 		}
 		
 		if (buttonVisibilityChanged)
 		{
 			commitButtonVisibility();
 			buttonVisibilityChanged = false;
+		}
+		
+		if (statusBarPropertiesChanged)
+		{
+			commitStatusBarProperties();
+			statusBarPropertiesChanged = false;
 		}		
 	}
 	
@@ -510,7 +589,7 @@ public class TitleContainerBase extends ContainerBase
 		// the flag calls, no need to call invalidateProperties() here
 		if (instance == titleBarDisplay)
 		{
-			addTitleBarHandlers(titleBarDisplay);
+			addOrRemoveTitleBarHandlers(titleBarDisplay, true);
 			commitTitleBarProperties();
 			commitButtonVisibility();
 			commitTitleBarPlacement();
@@ -518,9 +597,10 @@ public class TitleContainerBase extends ContainerBase
 		else if (instance == contentGroup)
 		{
 		}
-		//		else if (instance == statusBarDisplay)
-		//		{
-		//		}
+		else if (instance == statusBarDisplay)
+		{
+			commitStatusBarProperties();
+		}
 	}
 	
 	/**
@@ -532,15 +612,14 @@ public class TitleContainerBase extends ContainerBase
 		
 		if (instance == titleBarDisplay)
 		{
-			removeTitleBarHandlers(titleBarDisplay);
-			
+			addOrRemoveTitleBarHandlers(titleBarDisplay, false);
 		}
 		else if (instance == contentGroup)
 		{
 		}
-		//		else if (instance == statusBarDisplay)
-		//		{
-		//		}
+		else if (instance == statusBarDisplay)
+		{
+		}
 	}
 	
 	//--------------------------------------------------------------------------
@@ -551,19 +630,21 @@ public class TitleContainerBase extends ContainerBase
 	
 	/**
 	 * Commits the <code>titleBarDisplay</code> composite.
+	 * 
+	 * @see #showTitleBar
+	 * @see #title
+	 * @see #titleIcon
 	 */
 	protected function commitTitleBarProperties():void
 	{
 		if (!titleBarDisplay)
 			return;
 		
-		if (!_showTitleBar)
-		{
-			titleBarDisplay.visible = false;
-			return;
-		}
+		var show:Boolean = _showTitleBar;
+		titleBarDisplay.visible = show;
+		titleBarDisplay.includeInLayout = show;		
 		
-		var t:ITitleBar = titleBarDisplay as ITitleBar;
+		var t:ITitleBar = titleBar;
 		if (t)
 		{
 			t.title = _title;
@@ -572,14 +653,18 @@ public class TitleContainerBase extends ContainerBase
 	}
 	
 	/**
-	 * Commits.
+	 * Commits the titlebar's button visibility.
+	 * 
+	 * @see #showMinimizeButton
+	 * @see #showMaximizeButton
+	 * @see #showCloseButton
 	 */
 	protected function commitButtonVisibility():void
 	{
 		if (!titleBarDisplay)
 			return;
 		
-		var t:ITitleBar = titleBarDisplay as ITitleBar;
+		var t:ITitleBar = titleBar;
 		if (t)
 		{
 			t.showMinimizeButton = _showMinimizeButton;
@@ -590,6 +675,9 @@ public class TitleContainerBase extends ContainerBase
 	
 	/**
 	 * Commits the <code>titleBarPlacement</code> property.
+	 * 
+	 * @see #titleBarPlacement
+	 * @see org.teotigraphix.ui.api.control.IBar#placement
 	 */
 	protected function commitTitleBarPlacement():void
 	{
@@ -608,9 +696,26 @@ public class TitleContainerBase extends ContainerBase
 	
 	/**
 	 * Commits the <code>statusBarDisplay</code> composite.
+	 * 
+	 * @see #showStatusBar
+	 * @see #status
+	 * @see #statusIcon
 	 */
-	protected function commitStatusBarDisplay():void
+	protected function commitStatusBarProperties():void
 	{
+		if (!statusBarDisplay)
+			return;
+		
+		var show:Boolean = _showStatusBar;
+		statusBarDisplay.visible = show;
+		statusBarDisplay.includeInLayout = show;
+		
+		var s:IStatusBar = statusBar;
+		if (s)
+		{
+			s.status = _status;
+			s.statusIcon = _statusIcon;
+		}		
 	}
 	
 	//--------------------------------------------------------------------------
@@ -624,10 +729,10 @@ public class TitleContainerBase extends ContainerBase
 	 */
 	protected function invalidateTitleBar():void
 	{
-		if (titleBarDisplayChanged)
+		if (titleBarPropertiesChanged)
 			return;
 		
-		titleBarDisplayChanged = true;
+		titleBarPropertiesChanged = true;
 		invalidateProperties();
 	}
 	
@@ -668,25 +773,35 @@ public class TitleContainerBase extends ContainerBase
 	}
 	
 	/**
-	 * Add <code>TitleBarEvent</code> handlers to a button.
+	 * Add or removes <code>TitleBarEvent</code> handlers to or from a button.
 	 * 
 	 * @param titleBar An <code>IEventDispatcher</code> button.
 	 */
-	protected function addTitleBarHandlers(titleBar:IEventDispatcher):void
+	protected function addOrRemoveTitleBarHandlers(titleBar:IEventDispatcher,
+												   add:Boolean):void
 	{
-		titleBar.addEventListener(
-			TitleBarEvent.BUTTON_CLICK, titleBar_buttonClickHandler);
+		if (add)
+		{
+			titleBar.addEventListener(
+				TitleBarEvent.BUTTON_CLICK, titleBar_buttonClickHandler);
+		}
+		else
+		{
+			titleBar.removeEventListener(
+				TitleBarEvent.BUTTON_CLICK, titleBar_buttonClickHandler);
+		}
 	}
 	
 	/**
-	 * Remove <code>TitleBarEvent</code> handlers from a button.
-	 * 
-	 * @param titleBar An <code>IEventDispatcher</code> button.
+	 * @private
 	 */
-	protected function removeTitleBarHandlers(titleBar:IEventDispatcher):void
+	protected function invalidateStatusBar():void
 	{
-		titleBar.removeEventListener(
-			TitleBarEvent.BUTTON_CLICK, titleBar_buttonClickHandler);
+		if (statusBarPropertiesChanged)
+			return;
+		
+		statusBarPropertiesChanged = true;
+		invalidateProperties();
 	}
 	
 	//--------------------------------------------------------------------------
@@ -741,6 +856,7 @@ public class TitleContainerBase extends ContainerBase
 	
 	/**
 	 * @private
+	 * Returns the event type for the button's id.
 	 */
 	private function getTitleBarEventType(button:ButtonBase):String
 	{

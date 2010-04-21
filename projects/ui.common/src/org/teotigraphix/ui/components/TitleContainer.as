@@ -46,6 +46,14 @@ import org.teotigraphix.ui.utils.StyleUtil;
  */
 [Style(name="titleBarSkinClass",type="Class")]
 
+/**
+ * The alternate <code>skinClass</code> for the <code>statusBarDisplay</code>.
+ * 
+ * @mxml Class
+ * @default undefined
+ */
+[Style(name="statusBarSkinClass",type="Class")]
+
 [Style(name="offsetTitleBar",type="Boolean")]
 
 //--------------------------------------
@@ -136,8 +144,13 @@ public class TitleContainer extends TitleContainerBase
 		
 		if (instance == titleBarDisplay)
 		{
-			StyleUtil.setSkinClass(this, titleBarDisplay);
+			StyleUtil.setSkinClass(this, titleBarDisplay as IStyleClient);
 		}
+		
+		if (instance == statusBarDisplay)
+		{
+			StyleUtil.setSkinClass(this, statusBarDisplay as IStyleClient);
+		}		
 	}
 	
 	//--------------------------------------------------------------------------
@@ -162,8 +175,13 @@ public class TitleContainer extends TitleContainerBase
 		
 		if (allStyles || styleProp == "titleBarSkinClass")
 		{
-			StyleUtil.setSkinClass(this, titleBarDisplay);
+			StyleUtil.setSkinClass(this, titleBarDisplay as IStyleClient);
 		}
+			
+		if (allStyles || styleProp == "statusBarSkinClass")
+		{
+			StyleUtil.setSkinClass(this, statusBarDisplay as IStyleClient);
+		}	
 	}
 }
 }
