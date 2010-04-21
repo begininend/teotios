@@ -23,7 +23,8 @@ package org.teotigraphix.ui.components.controlSupport
 import org.teotigraphix.ui.api.IStatusBar;
 
 /**
- * The StatusBarBase
+ * The StatusBarBase class implements the <code>IStatusBar</code> 
+ * interface.
  * 
  * @author Michael Schmalle
  * @copyright Teoti Graphix, LLC
