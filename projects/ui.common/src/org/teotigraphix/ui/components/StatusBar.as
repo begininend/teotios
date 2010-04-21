@@ -63,7 +63,13 @@ public class StatusBar extends StatusBarBase
 			function ():void {
 				this.skinClass = StatusBarSkin;
 				
-				// ControlBase
+				// ComponentBase
+				this.borderColor = 0xFFFFFF;
+				this.borderAlpha = 1;
+				
+				this.backgroundColor = 0xFFFFFF;
+				this.backgroundAlpha = 1;
+				
 				this.paddingTop = 2;
 				this.paddingRight = 2;
 				this.paddingBottom = 2;
@@ -83,18 +89,10 @@ public class StatusBar extends StatusBarBase
 				this.barHighlightColors = [0xFFFFFF, 0xCCCCCC];
 				this.barHighlightAlphas = [1, 1];
 				
-				this.gap = 1;
-				this.verticalAlign = "middle";
+				this.gap = 5;
+				this.verticalAlign = "bottom";
 				this.horizontalAlign = "left";
 			});
-		
-		// #borderDisplay defaults
-		StyleUtil.factory(
-			"org.teotigraphix.ui.components.StatusBar",
-			"borderDisplay",
-			function ():void {
-				this.skinClass = BarBorderSkin;
-			});		
 	}
 	
 	//--------------------------------------------------------------------------

@@ -52,18 +52,19 @@
 	* - borderDisplay
 	* - contentGroup
 	*   - rightAdditions
-	*     - titleIconDisplay
+	*     - iconDisplay
 	*   - centerAdditions
-	*     - titleDisplay
+	*     - labelDisplay
 	*   - leftAdditions
 	-->
 	
 	<!--- The border skin. -->
 	<tx:ComponentBorder id="borderDisplay"
 						currentState="{currentState}"
+						skinClass="org.teotigraphix.ui.skins.controlSupport.BarBorderSkin"
 						top="0" right="0" left="0" bottom="0"/>
 	
-	<!-- Content Container [rightAdditions, centerAdditions, leftAdditions] -->
+	<!-- Content Container -->
 	<s:Group id="contentGroup" 
 			 top="{getStyle('paddingTop')}" 
 			 right="{getStyle('paddingRight')}" 
@@ -83,7 +84,7 @@
 		</s:layout.vertical>		
 		
 		<!--- The left additions container. -->
-		<s:Group id="leftAdditionsGroup" minWidth="0">
+		<s:Group id="leftAdditionsDisplay" minWidth="0">
 			
 			<!--- The <code>statusIcon</code> display image. -->
 			<s:BitmapImage id="iconDisplay"/>
@@ -111,7 +112,7 @@
 		</s:Group>
 		
 		<!--- The right additions container. -->
-		<s:Group id="rightAdditionsGroup">
+		<s:Group id="rightAdditionsDisplay">
 			
 			<s:layout.horizontal>
 				<s:HorizontalLayout gap="{getStyle('buttonGap')}"/>
