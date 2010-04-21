@@ -148,6 +148,130 @@ public interface ITitleContainer
 	
 	//--------------------------------------------------------------------------
 	//
+	//  ITitleBar API :: Properties
+	//
+	//--------------------------------------------------------------------------
+	
+	//----------------------------------
+	//  titleIcon
+	//----------------------------------
+	
+	/**
+	 * The graphical representation of the client context.
+	 * 
+	 * @productversion 1.0
+	 */
+	function get titleIcon():Class;
+	
+	/**
+	 * @private
+	 */
+	function set titleIcon(value:Class):void;
+	
+	//----------------------------------
+	//  title
+	//----------------------------------
+	
+	/**
+	 * The textual representation of the client context.
+	 * 
+	 * @productversion 1.0
+	 */
+	function get title():String;
+	
+	/**
+	 * @private
+	 */
+	function set title(value:String):void;
+	
+	//----------------------------------
+	//  showMinimizeButton
+	//----------------------------------
+	
+	/**
+	 * Whether to show the <code>minimizeButtonDisplay</code> of the title bar.
+	 * 
+	 * @productversion 1.0
+	 */
+	function get showMinimizeButton():Boolean;
+	
+	/**
+	 * @private
+	 */
+	function set showMinimizeButton(value:Boolean):void;
+	
+	//----------------------------------
+	//  showMaximizeButton
+	//----------------------------------
+	
+	/**
+	 * Whether to show the <code>maximizeButtonDisplay</code> of the title bar.
+	 * 
+	 * @productversion 1.0
+	 */
+	function get showMaximizeButton():Boolean;
+	
+	/**
+	 * @private
+	 */
+	function set showMaximizeButton(value:Boolean):void;
+	
+	//----------------------------------
+	//  showCloseButton
+	//----------------------------------
+	
+	/**
+	 * Whether to show the <code>closeButtonDisplay</code> of the title bar.
+	 * 
+	 * @productversion 1.0
+	 */
+	function get showCloseButton():Boolean;
+	
+	/**
+	 * @private
+	 */
+	function set showCloseButton(value:Boolean):void;
+	
+	//--------------------------------------------------------------------------
+	//
+	//  IStatusBar API :: Properties
+	//
+	//--------------------------------------------------------------------------
+	
+	//----------------------------------
+	//  statusIcon
+	//----------------------------------
+	
+	/**
+	 * The graphical representation of the client context.
+	 * 
+	 * @productversion 1.0
+	 */
+	function get statusIcon():Class;
+	
+	/**
+	 * @private
+	 */
+	function set statusIcon(value:Class):void;
+	
+	//----------------------------------
+	//  status
+	//----------------------------------
+	
+	/**
+	 * The textual representation of the client context.
+	 * 
+	 * @productversion 1.0
+	 */
+	function get status():String;
+	
+	/**
+	 * @private
+	 */
+	function set status(value:String):void;
+	
+	//--------------------------------------------------------------------------
+	//
 	//  Methods
 	//
 	//--------------------------------------------------------------------------
