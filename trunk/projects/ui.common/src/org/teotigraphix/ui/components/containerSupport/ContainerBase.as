@@ -133,28 +133,28 @@ import spark.layouts.supportClasses.LayoutBase;
  * 
  * @default 0
  */
-[Style(name="paddingTop",type="backgroundImage")]
+[Style(name="paddingTop", type="Number", inherit="no")]
 
 /**
  * The layout padding right.
  * 
  * @default 0
  */
-[Style(name="paddingRight",type="backgroundImage")]
+[Style(name="paddingRight", type="Number", inherit="no")]
 
 /**
  * The layout padding bottom.
  * 
  * @default 0
  */
-[Style(name="paddingBottom",type="backgroundImage")]
+[Style(name="paddingBottom", type="Number", inherit="no")]
 
 /**
  * The layout padding left.
  * 
  * @default 0
  */
-[Style(name="paddingLeft",type="backgroundImage")]
+[Style(name="paddingLeft", type="Number", inherit="no")]
 
 //  Radius Styles
 
@@ -163,35 +163,35 @@ import spark.layouts.supportClasses.LayoutBase;
  * 
  * @default 0
  */
-[Style(name="cornerRadius", type="backgroundImage", inherit="no")]
+[Style(name="cornerRadius", type="Number", inherit="no")]
 
 /**
  * The top left corner radius of the background.
  * 
  * @default 0
  */
-[Style(name="topLeftRadius", type="backgroundImage", inherit="no")]
+[Style(name="topLeftRadius", type="Number", inherit="no")]
 
 /**
  * The top right corner radius of the background.
  * 
  * @default 0
  */
-[Style(name="topRightRadius", type="backgroundImage", inherit="no")]
+[Style(name="topRightRadius", type="Number", inherit="no")]
 
 /**
  * The bottom left corner radius of the background.
  * 
  * @default 0
  */
-[Style(name="bottomLeftRadius", type="backgroundImage", inherit="no")]
+[Style(name="bottomLeftRadius", type="Number", inherit="no")]
 
 /**
  * The bottom right corner radius of the background.
  * 
  * @default 0
  */
-[Style(name="bottomRightRadius", type="backgroundImage", inherit="no")]
+[Style(name="bottomRightRadius", type="Number", inherit="no")]
 
 //--------------------------------------
 //  Class
@@ -271,7 +271,7 @@ public class ContainerBase extends SkinnableContainer
 	//--------------------------------------------------------------------------
 	
 	/**
-	 * @private
+	 * Calls the commit methods during dirty states.
 	 */
 	override protected function commitProperties():void
 	{

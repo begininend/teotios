@@ -462,6 +462,8 @@ public class TitleContainerBase extends ContainerBase
 	public function set showStatusBar(value:Boolean):void
 	{
 		_showStatusBar = value;
+		
+		invalidateStatusBar();
 	}
 	
 	//----------------------------------
@@ -491,7 +493,7 @@ public class TitleContainerBase extends ContainerBase
 	}
 	
 	//----------------------------------
-	//  showContentGroup
+	//  titleBarPlacement
 	//----------------------------------
 	
 	/**
@@ -544,12 +546,11 @@ public class TitleContainerBase extends ContainerBase
 	//--------------------------------------------------------------------------
 	
 	/**
-	 * Calls the commit methods during dirty states.
+	 * @inheritDoc
 	 * 
-	 * <p>Commits on dirty state;</p>
-	 * <ul>
-	 * <li><code></code></li>
-	 * </ul>
+	 * @see #commitTitleBarProperties()
+	 * @see #commitButtonVisibility()
+	 * @see #commitStatusBarProperties()
 	 */
 	override protected function commitProperties():void
 	{
