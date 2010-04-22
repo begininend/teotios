@@ -54,10 +54,15 @@ import org.teotigraphix.ui.utils.StyleUtil;
  */
 [Style(name="statusBarSkinClass",type="Class")]
 
+/**
+ * Whether to offset the titleBar inside the container's borderWeight.
+ * 
+ * @default false
+ */
 [Style(name="offsetTitleBar",type="Boolean")]
 
 //--------------------------------------
-//  Styles
+//  Class
 //--------------------------------------
 
 /**
@@ -104,6 +109,10 @@ public class TitleContainer extends TitleContainerBase
 				this.cornerRadius = 0;
 				this.dropShadowVisible = true;
 				
+				// TitleContainer
+				this.borderSkinClass = undefined;
+				this.titleBarSkinClass = undefined;
+				this.statusBarSkinClass = undefined;
 				this.offsetTitleBar = true;
 			});
 	}
