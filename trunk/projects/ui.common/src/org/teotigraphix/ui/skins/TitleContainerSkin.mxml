@@ -53,6 +53,7 @@
 			{
 				super.updateDisplayList(unscaledWidth, unscaledHeight);
 				
+				// need to figure out
 				borderDisplay.skin.invalidateDisplayList();
 			}
 			
@@ -64,15 +65,22 @@
 		<containerSupport:TitleContainerSkinLayout/>
 	</s:layout>
 	
-	<!-- -->
+	<!--- The border skin part -->
 	<tx:ComponentBorder id="borderDisplay"
 						currentState="{currentState}"
 						skinClass="org.teotigraphix.ui.skins.containerSupport.TitleContainerBorderSkin"/>
 	
+	<!--- The titlebar skin part -->
 	<tx:TitleBar id="titleBarDisplay" 
 				 skinClass="org.teotigraphix.ui.skins.TitleBarSkin"
 				 minWidth="0"/>
 	
+	<!--- The contentGroup skin part -->
 	<s:Group id="contentGroup"/>
+	
+	<!--- The statusbar skin part -->
+	<tx:StatusBar id="statusBarDisplay" 
+				  skinClass="org.teotigraphix.ui.skins.StatusBarSkin"
+				  minWidth="0"/>	
 	
 </s:Skin>

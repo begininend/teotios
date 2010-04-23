@@ -20,13 +20,28 @@
 package org.teotigraphix.ui.skins.containerSupport
 {
 
+import mx.core.IVisualElement;
+
+import org.teotigraphix.ui.components.containerSupport.TitleContainerBase;
 import org.teotigraphix.ui.core.BarPlacement;
 import org.teotigraphix.ui.skins.TitleContainerSkin;
 
+import spark.components.Group;
 import spark.components.supportClasses.GroupBase;
 import spark.layouts.supportClasses.LayoutBase;
 
 /**
+ * A default custom layout for the TitleContainerSkin.
+ * 
+ * <p>The layout allows for top, right, bottom and left titleBar placements.
+ * The statusBar if visible will always be layed out on the bottom of the
+ * container. If the titleBarPlacement value is bottom and the statusBar
+ * is visible, the statusBar will be placed above the titleBar with the
+ * content above it.</p>
+ * 
+ * <p>A possible subclass could allow the status bar to be layed out next
+ * to the title bar at all times.</p>
+ * 
  * @author Michael Schmalle
  * @copyright Teoti Graphix, LLC
  * @productversion 1.0
@@ -74,18 +89,51 @@ public class TitleContainerSkinLayout extends LayoutBase
 	 */
 	protected var titleBarHeight:Number;
 	
+	/**
+	 * @private
+	 */
+	protected var statusBarWidth:Number;
 	
+	/**
+	 * @private
+	 */
+	protected var statusBarHeight:Number;
+	
+	/**
+	 * @private
+	 */
 	protected var offsetTitleBar:Boolean = false;
 	
+	/**
+	 * @private
+	 */
+	protected var container:TitleContainerBase;
 	
+	//--------------------------------------------------------------------------
+	//
+	//  Constructor
+	//
+	//--------------------------------------------------------------------------
 	
-	
+	/**
+	 * Constructor.
+	 */
 	public function TitleContainerSkinLayout()
 	{
 		super();
 	}
 	
+	//--------------------------------------------------------------------------
+	//
+	//  Overridden Public :: Methods
+	//
+	//--------------------------------------------------------------------------
 	
+	// TODO (mschmalle) measure depends on bar visibiltiies
+	
+	/**
+	 * @private
+	 */
 	public override function measure():void
 	{
 		var layoutTarget:GroupBase = target;
@@ -93,35 +141,41 @@ public class TitleContainerSkinLayout extends LayoutBase
 			return;
 		
 		var skin:TitleContainerSkin = layoutTarget as TitleContainerSkin;
+		container = skin.hostComponent;
+		
+		var placement:String = container.titleBarPlacement;
+		
+		var titleBar:IVisualElement = container.titleBarDisplay;
+		var contentGroup:Group = container.contentGroup;
+		var statusBar:IVisualElement = container.statusBarDisplay;
 		
 		var mWidth:Number = 0;
-		var mHeight:Number = 0;		
+		var mHeight:Number = 0;
 		
-		mWidth += Math.max(
-			skin.contentGroup.getMinBoundsWidth(),
-			skin.contentGroup.getPreferredBoundsWidth());
-		
-		mHeight += Math.max(
-			skin.contentGroup.getMinBoundsHeight(),
-			skin.contentGroup.getPreferredBoundsHeight());
-		
-		// don't measure padding, contentGroup layout calcs that
-		
-		offsetTitleBar = skin.getStyle("offsetTitleBar");
+		offsetTitleBar = container.getStyle("offsetTitleBar");
 		
 		// add border width
-		borderVisible = skin.getStyle("borderVisible");
-		borderWeight = skin.getStyle("borderWeight");
+		borderVisible = container.getStyle("borderVisible");
+		borderWeight = container.getStyle("borderWeight");
 		if (!borderVisible)
 			borderWeight = 0;
 		
-		if (skin.titleBarDisplay)
+		// measure contentGroup's min & max
+		mWidth += Math.max(
+			contentGroup.getMinBoundsWidth(),
+			contentGroup.getPreferredBoundsWidth());
+		
+		mHeight += Math.max(
+			contentGroup.getMinBoundsHeight(),
+			contentGroup.getPreferredBoundsHeight());
+		
+		// measure the titleBar
+		if (titleBar && container.showTitleBar)
 		{
-			if (skin.hostComponent.titleBarPlacement == "left" ||
-				skin.hostComponent.titleBarPlacement == "right")
+			if (placement == "left" || placement == "right")
 			{
-				mHeight = Math.max(mHeight, skin.titleBarDisplay.getPreferredBoundsHeight());
-				mWidth += skin.titleBarDisplay.getPreferredBoundsWidth();
+				mHeight = Math.max(mHeight, titleBar.getPreferredBoundsHeight());
+				mWidth += titleBar.getPreferredBoundsWidth();
 				
 				// add the offsets to the measurements if we are offsetting the titleBar
 				mHeight += (offsetTitleBar) ? borderWeight * 2 : 0;
@@ -129,13 +183,20 @@ public class TitleContainerSkinLayout extends LayoutBase
 			}
 			else
 			{
-				mWidth = Math.max(mWidth, skin.titleBarDisplay.getPreferredBoundsWidth());
-				mHeight += skin.titleBarDisplay.getPreferredBoundsHeight();
+				mWidth = Math.max(mWidth, titleBar.getPreferredBoundsWidth());
+				mHeight += titleBar.getPreferredBoundsHeight();
 				
 				// add the offsets to the measurements if we are offsetting the titleBar
 				mWidth += (offsetTitleBar) ? borderWeight * 2 : 0;
 				mHeight += (offsetTitleBar) ? borderWeight * 2 : borderWeight;
 			}
+		}
+		
+		// measure the statusBar
+		if (statusBar && container.showStatusBar)
+		{
+			mWidth = Math.max(mWidth, statusBar.getPreferredBoundsWidth());
+			mHeight += statusBar.getPreferredBoundsHeight();
 		}
 		
 		layoutTarget.measuredWidth = mWidth;
@@ -144,7 +205,9 @@ public class TitleContainerSkinLayout extends LayoutBase
 		layoutTarget.measuredMinHeight = mHeight;		
 	}
 	
-
+	/**
+	 * @private
+	 */
 	public override function updateDisplayList(width:Number, height:Number):void
 	{
 		var layoutTarget:GroupBase = target;
@@ -152,20 +215,32 @@ public class TitleContainerSkinLayout extends LayoutBase
 			return;
 		
 		var skin:TitleContainerSkin = layoutTarget as TitleContainerSkin;
+		container = skin.hostComponent;
 		
-		offsetTitleBar = skin.getStyle("offsetTitleBar");
+		var titleBar:IVisualElement = container.titleBarDisplay;
+		var contentGroup:Group = container.contentGroup;
+		var statusBar:IVisualElement = container.statusBarDisplay;
 		
-		borderVisible = skin.getStyle("borderVisible");
-		borderWeight = skin.getStyle("borderWeight");
+		offsetTitleBar = container.getStyle("offsetTitleBar");
+		
+		borderVisible = container.getStyle("borderVisible");
+		var borderWeight:Number = container.getStyle("borderWeight");
 		if (!borderVisible)
 			borderWeight = 0;
 		
-		titleBarWidth = skin.titleBarDisplay.getPreferredBoundsWidth();
-		titleBarHeight = skin.titleBarDisplay.getPreferredBoundsHeight();	
+		titleBarWidth = titleBar.getPreferredBoundsWidth();
+		titleBarHeight = titleBar.getPreferredBoundsHeight();
 		
-		skin.borderDisplay.visible = borderVisible;
+		statusBarWidth = statusBar.getPreferredBoundsWidth();
+		statusBarHeight = statusBar.getPreferredBoundsHeight();		
 		
-		switch(skin.hostComponent.titleBarPlacement)
+		if (container.borderDisplay)
+		{
+			container.borderDisplay.visible = borderVisible;
+			container.borderDisplay.includeInLayout = borderVisible;
+		}
+		
+		switch(container.titleBarPlacement)
 		{
 			case BarPlacement.TOP:
 				
@@ -207,7 +282,9 @@ public class TitleContainerSkinLayout extends LayoutBase
 	protected function updateHorizontal(width:Number, height:Number):void
 	{
 		contentWidth = width - (borderWeight * 2);
-		contentHeight = height - titleBarHeight - borderWeight;
+		// if the titleBar is offset into the container, only count one borderWeight
+		var weight:Number = (offsetTitleBar) ? borderWeight * 2 : borderWeight;
+		contentHeight = height - titleBarHeight - statusBarHeight - weight;
 	}
 	
 	/**
@@ -219,8 +296,10 @@ public class TitleContainerSkinLayout extends LayoutBase
 	 */
 	protected function updateVertical(width:Number, height:Number):void
 	{
-		contentHeight = height - (borderWeight * 2);
-		contentWidth = width - titleBarWidth - borderWeight;
+		contentHeight = height - (borderWeight * 2) - statusBarHeight;
+		// if the titleBar is offset into the container, only count one borderWeight
+		var weight:Number = (offsetTitleBar) ? borderWeight * 2 : borderWeight;
+		contentWidth = width - titleBarWidth - weight;
 	}
 	
 	/**
@@ -234,30 +313,38 @@ public class TitleContainerSkinLayout extends LayoutBase
 	 */
 	protected function layoutTop(width:Number, height:Number):void
 	{
-		var layoutTarget:GroupBase = target;
-		var skin:TitleContainerSkin = layoutTarget as TitleContainerSkin;
-		
-		if (borderVisible)
+		if (container.borderDisplay && borderVisible)
 		{
 			// layout border
-			skin.borderDisplay.setLayoutBoundsPosition(0, 0);
-			skin.borderDisplay.setLayoutBoundsSize(width, height);
+			container.borderDisplay.setLayoutBoundsPosition(0, 0);
+			container.borderDisplay.setLayoutBoundsSize(width, height);
 		}
 		
-		if (skin.titleBarDisplay)
+		if (container.titleBarDisplay && container.showTitleBar)
 		{
 			var tx:Number = (offsetTitleBar) ? borderWeight : 0;
 			var ty:Number = (offsetTitleBar) ? borderWeight : 0;
 			var tw:Number = (offsetTitleBar) ? width - (borderWeight * 2) : width;
 			
 			// layout titleBar
-			skin.titleBarDisplay.setLayoutBoundsSize(tw, titleBarHeight);
-			skin.titleBarDisplay.setLayoutBoundsPosition(tx, ty);
+			container.titleBarDisplay.setLayoutBoundsSize(tw, titleBarHeight);
+			container.titleBarDisplay.setLayoutBoundsPosition(tx, ty);
 		}
 		
 		// layout contentGroup
-		skin.contentGroup.setLayoutBoundsSize(contentWidth, contentHeight);
-		skin.contentGroup.setLayoutBoundsPosition(borderWeight, titleBarHeight);
+		container.contentGroup.setLayoutBoundsSize(
+			contentWidth, contentHeight);
+		container.contentGroup.setLayoutBoundsPosition(
+			borderWeight, ty + titleBarHeight);
+		
+		// layout statusBar
+		if (container.statusBarDisplay && container.showStatusBar)
+		{
+			container.statusBarDisplay.setLayoutBoundsSize(
+				contentWidth, statusBarHeight);
+			container.statusBarDisplay.setLayoutBoundsPosition(
+				borderWeight, height - statusBarHeight - borderWeight);
+		}
 	}
 	
 	/**
@@ -271,31 +358,38 @@ public class TitleContainerSkinLayout extends LayoutBase
 	 */
 	protected function layoutBottom(width:Number, height:Number):void
 	{
-		var layoutTarget:GroupBase = target;
-		var skin:TitleContainerSkin = layoutTarget as TitleContainerSkin;
-		
-		if (borderVisible)
+		if (container.borderDisplay && borderVisible)
 		{
 			// layout border
-			skin.borderDisplay.setLayoutBoundsPosition(0, 0);
-			skin.borderDisplay.setLayoutBoundsSize(width, height);
+			container.borderDisplay.setLayoutBoundsPosition(0, 0);
+			container.borderDisplay.setLayoutBoundsSize(width, height);
 		}
 		
-		if (skin.titleBarDisplay)
+		if (container.titleBarDisplay && container.showTitleBar)
 		{
 			var tx:Number = (offsetTitleBar) ? borderWeight : 0;
 			var ty:Number = (offsetTitleBar) ? borderWeight : 0;
-			var tw:Number = (offsetTitleBar) ? width - (borderWeight * 2) : width;
 			ty = height - titleBarHeight - ty;
 			
+			var tw:Number = (offsetTitleBar) ? width - (borderWeight * 2) : width;
+			
 			// layout titleBar
-			skin.titleBarDisplay.setLayoutBoundsSize(tw, titleBarHeight);
-			skin.titleBarDisplay.setLayoutBoundsPosition(tx, ty);
+			container.titleBarDisplay.setLayoutBoundsSize(tw, titleBarHeight);
+			container.titleBarDisplay.setLayoutBoundsPosition(tx, ty);
 		}
 		
 		// layout contentGroup
-		skin.contentGroup.setLayoutBoundsSize(contentWidth, contentHeight);
-		skin.contentGroup.setLayoutBoundsPosition(borderWeight, borderWeight);		
+		container.contentGroup.setLayoutBoundsSize(contentWidth, contentHeight);
+		container.contentGroup.setLayoutBoundsPosition(borderWeight, borderWeight);
+		
+		// layout statusBar
+		if (container.statusBarDisplay && container.showStatusBar)
+		{
+			container.statusBarDisplay.setLayoutBoundsSize(
+				contentWidth, statusBarHeight);
+			container.statusBarDisplay.setLayoutBoundsPosition(
+				borderWeight, height - statusBarHeight - titleBarHeight - borderWeight);
+		}
 	}
 	
 	/**
@@ -309,30 +403,36 @@ public class TitleContainerSkinLayout extends LayoutBase
 	 */
 	protected function layoutLeft(width:Number, height:Number):void
 	{
-		var layoutTarget:GroupBase = target;
-		var skin:TitleContainerSkin = layoutTarget as TitleContainerSkin;
-		
-		if (borderVisible)
+		if (container.borderDisplay && borderVisible)
 		{
 			// layout border
-			skin.borderDisplay.setLayoutBoundsPosition(0, 0);
-			skin.borderDisplay.setLayoutBoundsSize(width, height);
+			container.borderDisplay.setLayoutBoundsPosition(0, 0);
+			container.borderDisplay.setLayoutBoundsSize(width, height);
 		}
 		
-		if (skin.titleBarDisplay)
+		var tx:Number = (offsetTitleBar) ? borderWeight : 0;
+		var ty:Number = (offsetTitleBar) ? borderWeight : 0;
+		var th:Number = (offsetTitleBar) ? height - (borderWeight * 2) : height;
+		
+		if (container.titleBarDisplay && container.showTitleBar)
 		{
-			var tx:Number = (offsetTitleBar) ? borderWeight : 0;
-			var ty:Number = (offsetTitleBar) ? borderWeight : 0;
-			var th:Number = (offsetTitleBar) ? height - (borderWeight * 2) : height;
-			
 			// layout titleBar
-			skin.titleBarDisplay.setLayoutBoundsSize(titleBarWidth, th);
-			skin.titleBarDisplay.setLayoutBoundsPosition(tx, ty);
+			container.titleBarDisplay.setLayoutBoundsSize(titleBarWidth, th);
+			container.titleBarDisplay.setLayoutBoundsPosition(tx, ty);
 		}
 		
 		// layout contentGroup
-		skin.contentGroup.setLayoutBoundsSize(contentWidth, contentHeight);
-		skin.contentGroup.setLayoutBoundsPosition(titleBarWidth, borderWeight);			
+		container.contentGroup.setLayoutBoundsSize(contentWidth, contentHeight);
+		container.contentGroup.setLayoutBoundsPosition(tx + titleBarWidth, borderWeight);
+		
+		// layout statusBar
+		if (container.statusBarDisplay && container.showStatusBar)
+		{
+			container.statusBarDisplay.setLayoutBoundsSize(
+				contentWidth, statusBarHeight);
+			container.statusBarDisplay.setLayoutBoundsPosition(
+				tx + titleBarWidth, height - statusBarHeight - borderWeight);
+		}
 	}
 	
 	/**
@@ -346,31 +446,38 @@ public class TitleContainerSkinLayout extends LayoutBase
 	 */
 	protected function layoutRight(width:Number, height:Number):void
 	{
-		var layoutTarget:GroupBase = target;
-		var skin:TitleContainerSkin = layoutTarget as TitleContainerSkin;
-		
-		if (borderVisible)
+		if (container.borderDisplay && borderVisible)
 		{
 			// layout border
-			skin.borderDisplay.setLayoutBoundsPosition(0, 0);
-			skin.borderDisplay.setLayoutBoundsSize(width, height);
+			container.borderDisplay.setLayoutBoundsPosition(0, 0);
+			container.borderDisplay.setLayoutBoundsSize(width, height);
 		}
 		
-		if (skin.titleBarDisplay)
+		var tx:Number = (offsetTitleBar) ? borderWeight : 0;
+		var ty:Number = (offsetTitleBar) ? borderWeight : 0;
+		var th:Number = (offsetTitleBar) ? height - (borderWeight * 2) : height;
+		
+		if (container.titleBarDisplay && container.showTitleBar)
 		{
-			var tx:Number = (offsetTitleBar) ? borderWeight : 0;
-			var ty:Number = (offsetTitleBar) ? borderWeight : 0;
-			var th:Number = (offsetTitleBar) ? height - (borderWeight * 2) : height;
 			tx = width - titleBarWidth - tx;
 			
 			// layout titleBar
-			skin.titleBarDisplay.setLayoutBoundsSize(titleBarWidth, th);
-			skin.titleBarDisplay.setLayoutBoundsPosition(tx, ty);
+			container.titleBarDisplay.setLayoutBoundsSize(titleBarWidth, th);
+			container.titleBarDisplay.setLayoutBoundsPosition(tx, ty);
 		}
 		
 		// layout contentGroup
-		skin.contentGroup.setLayoutBoundsSize(contentWidth, contentHeight);
-		skin.contentGroup.setLayoutBoundsPosition(borderWeight, borderWeight);
+		container.contentGroup.setLayoutBoundsSize(contentWidth, contentHeight);
+		container.contentGroup.setLayoutBoundsPosition(borderWeight, borderWeight);
+		
+		// layout statusBar
+		if (container.statusBarDisplay && container.showStatusBar)
+		{
+			container.statusBarDisplay.setLayoutBoundsSize(
+				contentWidth, statusBarHeight);
+			container.statusBarDisplay.setLayoutBoundsPosition(
+				borderWeight, height - statusBarHeight - borderWeight);
+		}
 	}
 }
 }
