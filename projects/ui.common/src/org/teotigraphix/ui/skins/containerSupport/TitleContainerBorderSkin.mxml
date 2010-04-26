@@ -48,6 +48,7 @@
 			override protected function updateDisplayList(unscaledWidth:Number, 
 														  unscaledHeight:Number):void
 			{
+				// TODO (mschmalle) figure out cornerRadius for background
 				var cr:Number = getStyle("cornerRadius");
 				
 				var container:TitleContainerBase = getContainer();
@@ -125,7 +126,7 @@
 	</s:Rect>
 	
 	<!--- The Rect background element. -->
-	<s:Rect id="background"
+	<s:Rect id="background" visible="true"
 			top="1" right="1" left="1" bottom="1">
 	</s:Rect>
 	

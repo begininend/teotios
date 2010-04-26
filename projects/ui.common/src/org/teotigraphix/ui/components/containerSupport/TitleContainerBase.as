@@ -688,6 +688,9 @@ public class TitleContainerBase extends ContainerBase
 		if (titleBarDisplay is IBar)
 			IBar(titleBarDisplay).placement = _titleBarPlacement;
 		
+		if (statusBarDisplay is IBar)
+			IBar(statusBarDisplay).placement = BarPlacement.BOTTOM;
+		
 		if (skin)
 		{
 			skin.invalidateSize();
