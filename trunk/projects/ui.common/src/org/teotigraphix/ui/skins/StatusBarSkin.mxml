@@ -60,8 +60,7 @@
 	
 	<!--- The border skin. -->
 	<tx:ComponentBorder id="borderDisplay"
-						currentState="{currentState}"
-						skinClass="org.teotigraphix.ui.skins.controlSupport.BarBorderSkin"
+						skinClass="org.teotigraphix.ui.skins.ComponentBorderSkin"
 						top="0" right="0" left="0" bottom="0"/>
 	
 	<!-- Content Container -->

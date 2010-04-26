@@ -102,7 +102,7 @@ public class TitleContainerSkinLayout extends LayoutBase
 	/**
 	 * @private
 	 */
-	protected var offsetTitleBar:Boolean = false;
+	protected var insetTitleBar:Boolean = false;
 	
 	/**
 	 * @private
@@ -129,8 +129,6 @@ public class TitleContainerSkinLayout extends LayoutBase
 	//
 	//--------------------------------------------------------------------------
 	
-	// TODO (mschmalle) measure depends on bar visibiltiies
-	
 	/**
 	 * @private
 	 */
@@ -152,7 +150,7 @@ public class TitleContainerSkinLayout extends LayoutBase
 		var mWidth:Number = 0;
 		var mHeight:Number = 0;
 		
-		offsetTitleBar = container.getStyle("offsetTitleBar");
+		insetTitleBar = container.getStyle("insetTitleBar");
 		
 		// add border width
 		borderVisible = container.getStyle("borderVisible");
@@ -178,8 +176,8 @@ public class TitleContainerSkinLayout extends LayoutBase
 				mWidth += titleBar.getPreferredBoundsWidth();
 				
 				// add the offsets to the measurements if we are offsetting the titleBar
-				mHeight += (offsetTitleBar) ? borderWeight * 2 : 0;
-				mWidth += (offsetTitleBar) ? borderWeight * 2 : borderWeight;				
+				mHeight += (insetTitleBar) ? borderWeight * 2 : 0;
+				mWidth += (insetTitleBar) ? borderWeight * 2 : borderWeight;				
 			}
 			else
 			{
@@ -187,8 +185,8 @@ public class TitleContainerSkinLayout extends LayoutBase
 				mHeight += titleBar.getPreferredBoundsHeight();
 				
 				// add the offsets to the measurements if we are offsetting the titleBar
-				mWidth += (offsetTitleBar) ? borderWeight * 2 : 0;
-				mHeight += (offsetTitleBar) ? borderWeight * 2 : borderWeight;
+				mWidth += (insetTitleBar) ? borderWeight * 2 : 0;
+				mHeight += (insetTitleBar) ? borderWeight * 2 : borderWeight;
 			}
 		}
 		
@@ -221,7 +219,7 @@ public class TitleContainerSkinLayout extends LayoutBase
 		var contentGroup:Group = container.contentGroup;
 		var statusBar:IVisualElement = container.statusBarDisplay;
 		
-		offsetTitleBar = container.getStyle("offsetTitleBar");
+		insetTitleBar = container.getStyle("insetTitleBar");
 		
 		borderVisible = container.getStyle("borderVisible");
 		var borderWeight:Number = container.getStyle("borderWeight");
@@ -283,7 +281,7 @@ public class TitleContainerSkinLayout extends LayoutBase
 	{
 		contentWidth = width - (borderWeight * 2);
 		// if the titleBar is offset into the container, only count one borderWeight
-		var weight:Number = (offsetTitleBar) ? borderWeight * 2 : borderWeight;
+		var weight:Number = (insetTitleBar) ? borderWeight * 2 : borderWeight;
 		contentHeight = height - titleBarHeight - statusBarHeight - weight;
 	}
 	
@@ -298,7 +296,7 @@ public class TitleContainerSkinLayout extends LayoutBase
 	{
 		contentHeight = height - (borderWeight * 2) - statusBarHeight;
 		// if the titleBar is offset into the container, only count one borderWeight
-		var weight:Number = (offsetTitleBar) ? borderWeight * 2 : borderWeight;
+		var weight:Number = (insetTitleBar) ? borderWeight * 2 : borderWeight;
 		contentWidth = width - titleBarWidth - weight;
 	}
 	
@@ -322,9 +320,9 @@ public class TitleContainerSkinLayout extends LayoutBase
 		
 		if (container.titleBarDisplay && container.showTitleBar)
 		{
-			var tx:Number = (offsetTitleBar) ? borderWeight : 0;
-			var ty:Number = (offsetTitleBar) ? borderWeight : 0;
-			var tw:Number = (offsetTitleBar) ? width - (borderWeight * 2) : width;
+			var tx:Number = (insetTitleBar) ? borderWeight : 0;
+			var ty:Number = (insetTitleBar) ? borderWeight : 0;
+			var tw:Number = (insetTitleBar) ? width - (borderWeight * 2) : width;
 			
 			// layout titleBar
 			container.titleBarDisplay.setLayoutBoundsSize(tw, titleBarHeight);
@@ -367,11 +365,11 @@ public class TitleContainerSkinLayout extends LayoutBase
 		
 		if (container.titleBarDisplay && container.showTitleBar)
 		{
-			var tx:Number = (offsetTitleBar) ? borderWeight : 0;
-			var ty:Number = (offsetTitleBar) ? borderWeight : 0;
+			var tx:Number = (insetTitleBar) ? borderWeight : 0;
+			var ty:Number = (insetTitleBar) ? borderWeight : 0;
 			ty = height - titleBarHeight - ty;
 			
-			var tw:Number = (offsetTitleBar) ? width - (borderWeight * 2) : width;
+			var tw:Number = (insetTitleBar) ? width - (borderWeight * 2) : width;
 			
 			// layout titleBar
 			container.titleBarDisplay.setLayoutBoundsSize(tw, titleBarHeight);
@@ -410,9 +408,9 @@ public class TitleContainerSkinLayout extends LayoutBase
 			container.borderDisplay.setLayoutBoundsSize(width, height);
 		}
 		
-		var tx:Number = (offsetTitleBar) ? borderWeight : 0;
-		var ty:Number = (offsetTitleBar) ? borderWeight : 0;
-		var th:Number = (offsetTitleBar) ? height - (borderWeight * 2) : height;
+		var tx:Number = (insetTitleBar) ? borderWeight : 0;
+		var ty:Number = (insetTitleBar) ? borderWeight : 0;
+		var th:Number = (insetTitleBar) ? height - (borderWeight * 2) : height;
 		
 		if (container.titleBarDisplay && container.showTitleBar)
 		{
@@ -453,9 +451,9 @@ public class TitleContainerSkinLayout extends LayoutBase
 			container.borderDisplay.setLayoutBoundsSize(width, height);
 		}
 		
-		var tx:Number = (offsetTitleBar) ? borderWeight : 0;
-		var ty:Number = (offsetTitleBar) ? borderWeight : 0;
-		var th:Number = (offsetTitleBar) ? height - (borderWeight * 2) : height;
+		var tx:Number = (insetTitleBar) ? borderWeight : 0;
+		var ty:Number = (insetTitleBar) ? borderWeight : 0;
+		var th:Number = (insetTitleBar) ? height - (borderWeight * 2) : height;
 		
 		if (container.titleBarDisplay && container.showTitleBar)
 		{
