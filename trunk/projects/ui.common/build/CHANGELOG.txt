@@ -1,5 +1,9 @@
 ui.common Framework Changelog:
 
+= v1.0.0 04-30-2010 =
+
+  * Stable 1.0 release
+
 = v0.9.3 04-07-2010 =
 
   * Released
