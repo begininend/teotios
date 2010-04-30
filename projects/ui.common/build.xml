@@ -17,13 +17,15 @@
 
 			<!-- Specify the source files for this library -->
 			<arg line="-source-path '${main.src.dir}'"/>
-				
+			<!-- Specify all files in main src to be added to the SWC -->
+			<arg line="-include-sources '${main.src.dir}'"/>
+			
 			<!-- Specify the manifest.xml file and namespace to use -->
 			<arg line="-namespace+=http://tx.teotigraphix.org/flex4,${basedir}/manifest.xml"/>
 			<arg line="-include-namespaces http://tx.teotigraphix.org/flex4"/>
 
 			<!-- create a link report 
-			<arg line="-link-report ${basedir}/deployed/link-report.xml"/>
+			<arg line="-link-report ${deployed.dir}/link-report.xml"/>
 			-->
 			
 			<arg value="-static-link-runtime-shared-libraries=true"/>
