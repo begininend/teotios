@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+// Copyright 2010 Michael Schmalle - Teoti Graphix, LLC
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+// http://www.apache.org/licenses/LICENSE-2.0 
+// 
+// Unless required by applicable law or agreed to in writing, software 
+// distributed under the License is distributed on an "AS IS" BASIS, 
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and 
+// limitations under the License
+// 
+// Author: Michael Schmalle, Principal Architect
+// mschmalle at teotigraphix dot com
+-->
+<!--- 
+* The default skin for the DockBar.
+* 
+* @author Michael Schmalle
+* @copyright Teoti Graphix, LLC
+* @productversion 1.0
+-->
+<s:Skin xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" 
+		xmlns:controlSupport="org.teotigraphix.ui.layouts.controlSupport.*" 
+		xmlns:dockBarSupport="org.teotigraphix.ui.components.dockBarSupport.*" xmlns:dockBar="org.teotigraphix.ui.components.componentSupport.dockBar.*" xmlns:componentSupport="org.teotigraphix.ui.components.componentSupport.*">
+	
+	<fx:Declarations>
+		
+		<!--- @see org.teotigraphix.ui.components.DockBar#rollOverAction -->
+		<fx:Component id="rollOverAction">
+			<s:Scale 
+				scaleXTo="1.35" 
+				scaleYTo="1.35" 
+				duration="200"
+				applyChangesPostLayout="true"
+				autoCenterTransform="true"/>
+		</fx:Component>
+		
+		<!--- @see org.teotigraphix.ui.components.DockBar#rollOutAction -->
+		<fx:Component id="rollOutAction">
+			<s:Scale 
+				scaleXTo="1"  
+				scaleYTo="1" 
+				duration="200"
+				applyChangesPostLayout="true"
+				autoCenterTransform="true"/>
+		</fx:Component>
+		
+		<!--- @see org.teotigraphix.ui.components.DockBar#dockButton -->
+		<fx:Component id="dockButton">
+			<componentSupport:DockBarButton
+				skinClass="org.teotigraphix.ui.skins.componentSupport.DockButtonSkin">
+			</componentSupport:DockBarButton>
+		</fx:Component>
+		
+	</fx:Declarations>
+	
+	<!-- host component -->
+	<fx:Metadata>
+		[HostComponent("org.teotigraphix.ui.components.DockBar")]
+	</fx:Metadata>
+	
+	<!-- states -->
+	<s:states>
+		<s:State name="normal" />
+		<s:State name="disabled" />
+	</s:states>
+	
+	<!-- The dock bar's border -->
+	<s:Rect top="0" left="0" bottom="0" right="0"
+			radiusX="8" radiusY="8">
+		<s:stroke>
+			<s:SolidColorStroke color="#CCCCCC" alpha="0.75"/>
+		</s:stroke>
+		<s:fill>
+			<s:SolidColor color="#000000" alpha="0.6"/>
+		</s:fill>
+	</s:Rect>
+	
+	<!--- @copy spark.components.SkinnableDataContainer#dataGroup -->
+	<s:DataGroup id="dataGroup" 
+				 top="10" right="15" bottom="10" left="15">
+		<s:layout>
+			<!-- The layout allows for horizontal and vertical layout. -->
+			<controlSupport:ButtonBarLayout gap="15"/>
+		</s:layout>
+	</s:DataGroup>
+	
+</s:Skin>

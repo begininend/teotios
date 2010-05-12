@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+// Copyright 2010 Michael Schmalle - Teoti Graphix, LLC
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+// http://www.apache.org/licenses/LICENSE-2.0 
+// 
+// Unless required by applicable law or agreed to in writing, software 
+// distributed under the License is distributed on an "AS IS" BASIS, 
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and 
+// limitations under the License
+// 
+// Author: Michael Schmalle, Principal Architect
+// mschmalle at teotigraphix dot com
+-->
+<!--- 
+* The default skin for the DockBarButton.
+* 
+* @author Michael Schmalle
+* @copyright Teoti Graphix, LLC
+* @productversion 1.0
+-->
+<s:Skin xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" 
+		xmlns:fb="http://ns.adobe.com/flashbuilder/2009" 
+		minWidth="21" minHeight="21" 
+		alpha.disabledStates="0.5">
+	
+	<!-- host component -->
+	<fx:Metadata>
+		[HostComponent("org.teotigraphix.ui.components.componentSupport.DockBarButton")]
+	</fx:Metadata>
+	
+	<!-- states -->
+	<s:states>
+		<s:State name="up" />
+		<s:State name="over" stateGroups="overStates" />
+		<s:State name="down" stateGroups="downStates" />
+		<s:State name="disabled" stateGroups="disabledStates" />
+		<s:State name="upAndSelected" stateGroups="selectedStates, selectedUpStates" />
+		<s:State name="overAndSelected" stateGroups="overStates, selectedStates" />
+		<s:State name="downAndSelected" stateGroups="downStates, selectedStates" />
+		<s:State name="disabledAndSelected" stateGroups="selectedUpStates, disabledStates, selectedStates" />
+	</s:states>
+	
+	<!-- for hit area -->
+	<s:Rect top="0" right="0" bottom="0" left="0">
+		<s:fill>
+			<s:SolidColor color="#FFFFFF" alpha="0"/>
+		</s:fill>
+	</s:Rect>
+	
+	<s:VGroup horizontalAlign="center">
+		
+		<!--- The icon display skin part. -->
+		<s:BitmapImage id="iconDisplay"/>
+		
+		<!--- The label display skin part. -->
+		<s:Label id="labelDisplay"
+				 textAlign="center"
+				 fontWeight="normal" fontSize="10" color="#FFFFFF"
+				 verticalAlign="middle"
+				 maxDisplayedLines="1"
+				 horizontalCenter="0" verticalCenter="1"
+				 left="10" right="10" top="2" bottom="2">
+			
+			<s:filters>
+				<s:DropShadowFilter blurX="2" blurY="2" distance="2"/>
+			</s:filters>
+			
+		</s:Label>
+		
+	</s:VGroup>
+	
+</s:Skin>
